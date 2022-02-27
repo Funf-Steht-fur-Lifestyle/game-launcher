@@ -1,0 +1,345 @@
+body {
+  background-color: #121212;
+}
+
+.content {
+  padding-top: 50px;
+  padding-right: 50px;
+  padding-left: 250px;
+  background-color: #121212;
+  height: 100%;
+}
+
+.popup-content {
+  background-color: #121212;
+  color: #F1F1F1;
+}
+
+.button-close {
+  background: transparent !important;
+  border-color: transparent !important;
+  color: white !important;
+}
+.button-close:focus {
+  box-shadow: none !important;
+  outline: 0px !important;
+}
+
+.content a:hover {
+  color: #F1F1F1;
+  text-decoration: none;
+}
+
+.grid img {
+    width: 30vh;
+    height: 30vh;
+    object-fit: cover;
+}
+
+.button {
+  background-color: transparent;
+  border-color: transparent;
+  color: #F1F1F1;
+}
+
+.button:focus {
+  outline: none;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.brightness {
+    display: inline-block;
+
+}
+.brightness img:hover {
+    opacity: .5;
+}
+
+.like-button {
+  color: #0074E4;
+  font-size: 20px;
+  cursor: pointer;
+  border-radius: 10rem;
+  background-color: transparent;
+  border: transparent;
+  display: none;
+}
+
+.undelete-btn {
+  width: 100%;
+  background: #0074E4 !important;
+  border-color: #0074E4 !important;
+  color: white !important;
+}
+
+.undelete-btn:focus {
+  box-shadow: none !important;
+  outline: 0px !important;
+}
+
+.fa-heart {
+  position: absolute;
+  z-index: 2;
+  color: #0074E4;
+  position: absolute;
+}
+
+.sorting {
+  display: inline-block;
+}
+
+.import-export {
+  display: inline-block;
+  float: right;
+}
+
+.import-export a {
+  color: #F1F1F1;
+}
+
+.grid-item a {
+  color: #EDDFD8;
+}
+
+.game-img {
+  padding-bottom: 10px;
+}
+
+.game-title {
+  padding-bottom: 10px;
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.game-price {
+  font-size: 1em;
+}
+
+a {
+    text-decoration: none;
+}
+
+.grid-add-item {
+    display: -webkit-box;  /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+    display: -ms-flexbox;  /* TWEENER - IE 10 */
+    display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+    display: flex;         /* NEW, Spec - Firefox, Chrome, Opera */
+
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 5.2em;
+    background-color: rgba(2, 2, 2, 0.1); 
+}
+
+.search-field {
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid white;
+    overflow: hidden;
+    margin: 8px 8px 8px 0px;
+
+    width: 150px;
+    color: #818181;
+    outline: none;
+}
+
+.category-btn {
+  display: none;
+}
+
+/* The side navigation menu */
+.sidenav {
+  margin-top: 55px;
+  padding-left: 32px;
+  height: 100%; /* 100% Full-height */
+  width: 200px; /* 0 width - change this with JavaScript */
+  position: absolute; /* Stay in place */
+  z-index: 1; /* Stay on top */
+  top: 0; /* Stay at the top */
+  left: 0;
+  background-color: #121212; /* Black*/
+  padding-top: 30px;
+  overflow-x: hidden; /* Disable horizontal scroll */
+  transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+}
+
+/* The navigation menu links */
+.sidenav a {
+  padding-bottom: 8px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+.category:hover .category-btn {
+  display: inline-block;
+}
+
+/* Position and style the close button (top right corner) */
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+.category {
+  color: #f1f1f1;
+  font-size: 1em;
+}
+
+.category a {
+  display: inline-block;
+}
+
+/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+#main {
+  transition: margin-left .5s;
+  padding: 20px;
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+
+.plus {
+  --b:4px; /* the thickness */
+  width:40px; /* the size */
+  aspect-ratio:1/1;
+  border:10px solid #000; /* the outer space */
+  background:
+    conic-gradient(from 90deg at var(--b) var(--b),#000 90deg,#fff 0) 
+    calc(100% + var(--b)/2) calc(100% + var(--b)/2)/
+    calc(50%  + var(--b))   calc(50%  + var(--b));
+  display:inline-block;
+}
+
+.alt {
+  border-color:#fff;
+  background:
+    conic-gradient(from 90deg at var(--b) var(--b),#fff 90deg,#000 0) 
+    calc(100% + var(--b)/2) calc(100% + var(--b)/2)/
+    calc(50%  + var(--b))   calc(50%  + var(--b));
+}
+.radius {
+  border-radius:50%;
+}
+
+.checked {
+   color: yellow;
+}
+
+.description {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+}
+
+
+{box-sizing: border-box;}
+
+/* Button used to open the contact form - fixed at the bottom of the page */
+.open-button {
+  background-color: #555;
+  color: white;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  opacity: 0.8;
+  position: fixed;
+  bottom: 23px;
+  right: 28px;
+  width: 280px;
+}
+
+/*body :not(#unblurred){
+    filter: blur(2px);    
+}
+#unblurred #box {
+    background:yellow; 
+    border:2px solid black; 
+    filter: blur(0px);
+}*/
+
+/* The popup form - hidden by default */
+.form-popup {
+  display: block;
+  position: fixed;
+  bottom: 0;
+  right: 15px;
+  border: 3px solid #f1f1f1;
+  z-index: 9;
+}
+
+/* Add styles to the form container */
+.form-container {
+  background-color: #111;
+  color: white;
+  max-width: 300px;
+  padding: 10px;
+  position: fixed;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+/* Full-width input fields */
+.form-container input[type=text], .form-container input[type=password] {
+  width: 100%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  border: none;
+  background: #f1f1f1;
+}
+
+/* When the inputs get focus, do something */
+.form-container input[type=text]:focus, .form-container input[type=password]:focus {
+  background-color: #ddd;
+  outline: none;
+}
+
+/* Set a style for the submit/login button */
+.form-container .btn {
+  background-color: #04AA6D;
+  color: white;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom:10px;
+  opacity: 0.8;
+}
+
+/* Add a red background color to the cancel button */
+.form-container .cancel {
+  background-color: red;
+}
+
+/* Add some hover effects to buttons */
+.form-container .btn:hover, .open-button:hover {
+  opacity: 1;
+}
+
+.form-container textarea {
+    margin-bottom: 10px
+}

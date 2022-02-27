@@ -1,0 +1,20 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'style.css' %}" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<div id="mySidenav" class="sidenav">
+  <input class="search-field" type="text">
+  <span class="category-title"><a href="/app/">Alle</a></span>
+  <span class="category-title"><a href="/app/category/deleted">Gelöschte</a></span>
+  {% for category in categories %}
+    <div class="category">
+      <span class="category-title"><a href="/app/category/{{ category.id }}">{{ category.title }}</a></span>
+      
+      <button class="category-btn edit-category-btn button" type="button" name="button" data-form-url="{% url 'update_category' category_id=category.id %}"><span class="fa fa-pencil"></span></button>
+      <span class="category-btn"><a href="/app/category/delete/{{ category.id }}" class="fa fa-trash"></a></span>
+    </div>
+  {% endfor %}
+  <button id="add-category-btn" class="button" type="button" name="button"><span class="fa fa-plus"></span></button>
+</div>
+

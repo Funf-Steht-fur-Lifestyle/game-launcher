@@ -1,0 +1,39 @@
+/* Add a black background color to the top navigation */
+.topnav {
+  background-color: #2A2A2A;
+  overflow: hidden;
+}
+
+/* Style the links inside the navigation bar */
+.topnav a {
+  float: right;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  background-color: #0074E4;
+  font-size: 17px;
+}
+
+#login-message {
+  float: right;
+  color: #F1F1F1;
+  background-color: #2A2A2A;
+  padding: 14px 16px 0px 0px;
+  font-size: 17px;
+  text-align: center;
+}
+
+#login-message p {
+  background-color: #2A2A2A;
+}
+
+.topnav a:hover {
+  color: #F1F1F1;
+  text-decoration: none;
+}
+
+/* Add a color to the active/current link */
+.topnav a.active {
+  color: #F1F1F1;
+}

@@ -1,0 +1,38 @@
+{% include "navbar.html" %}
+{% include "topnav.html" %}
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'style.css' %}" />
+<link rel="stylesheet" href="{% static 'topnav.css' %}" />
+<link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+<div class="content">
+<div class="sorting">
+    <span><p>Sortiere nach: </p></span>
+  </div>
+  <div class="import-export">
+    <span><a href="{% url 'import_csv' %}">Import</a></span>
+    <span><a href="{% url 'export_users_csv' %}">Export</a></span>
+  </div>
+<div class="grid">
+  {% for game in games %}
+    <div class="grid-item">
+	<a href="game/{{ game.id }}">
+  	<div href="#" class="like-button" title="Like Button">
+            <i class="fa fa-heart fa-1x"></i>
+          </div>
+  	<span><div class="game-img brightness"><img src="{{ game.thumbnail.url }}"></div></span>
+  	<span><div class="game-title">{{ game.name }}</div></span>
+  	<span><div class="game-price">33,45 €</div></span>
+        </a>
+    </div>
+  {% endfor %}
+  
+   <div class="grid-item grid-add-item">
+	    <button id="add-game-btn" class="button" type="button" name="button"><span class="fa fa-plus"></span></button>
+    </div>
+  
+</div>
+</div>

@@ -1,0 +1,8 @@
+django
+setuptools
+django
+django-import-export
+django-bootstrap-modal-forms
+pillow
+fpdf2
+requests
