@@ -11,7 +11,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 
-from bootstrap_modal_forms.generic import BSModalCreateView, BSModalUpdateView
+from bootstrap_modal_forms.generic import BSModalCreateView, BSModalUpdateView, BSModalDeleteView
 
 from tablib import Dataset
 
@@ -19,12 +19,12 @@ from .models import Game, Category
 from .resources import GameResource
 from .forms import GameForm, CategoryForm, CreateUserForm
 
-# This fiels contains the logic for the URLs i. e. it tells what
+# This file contains the logic for the URLs i. e. it tells what
 # should be represented by the browser. For example loading an
 # index.html file or making the HTTP GET/POST request to the API.
 
 # Every method in this file, that requires for the user to be logged
-# in to access it, must contain the @login_required(login_url='/app/login')
+# in to access it, must be marked with the @login_required(login_url='/app/login')
 # annotation. Otherwise the user, that is not logged in will be able to
 # access it.
 #
@@ -58,6 +58,16 @@ def game_by_id(request, game_id):
 @login_required(login_url='/app/login')
 def game_delete(request, game_id):
     game = Game.objects.get(pk=game_id)
+    game.deleted = True
+    game.save()
+
+    return HttpResponseRedirect('/app/')
+
+
+@login_required(login_url='/app/login')
+def mark_unmark_as_favorite(request, game_id):
+    game = Game.objects.get(pk=game_id)
+
     game.deleted = True
     game.save()
 
@@ -168,7 +178,7 @@ def logout_user(request):
 
 
 # @csrf_exempt is needed for the registration form to work
-# correctcly. I do not know as to why, because other forms
+# correctly. I do not know as to why, because other forms
 # do not require it.
 @csrf_exempt
 def register_page(request):
@@ -208,6 +218,11 @@ def api_call(request):
     return HttpResponse('Error')
 
 
+# Define your print method here
+def print_game(request):
+    return HttpResponseRedirect('/app/game/print')
+
+
 # For the popups to work, we need to create classes that extend
 # the original view (BSModelCreate|Update|DeleteView).
 #
@@ -235,9 +250,23 @@ class CategoryCreateView(BSModalCreateView):
     success_url = reverse_lazy('index')
 
 
+class GameDeleteView(BSModalDeleteView):
+    model = Game
+    template_name = 'delete_game.html'
+    success_message = 'Success: Game was deleted.'
+    success_url = reverse_lazy('index')
+
+
 class CategoryUpdateView(BSModalUpdateView):
     model = Category
-    form_class = CategoryForm
     template_name = 'category_edit.html'
+    form_class = CategoryForm
     success_message = 'Success: Category was updated.'
+    success_url = reverse_lazy('index')
+
+
+class CategoryDeleteView(BSModalDeleteView):
+    model = Category
+    template_name = 'delete_category.html'
+    success_message = 'Success: Category was deleted.'
     success_url = reverse_lazy('index')

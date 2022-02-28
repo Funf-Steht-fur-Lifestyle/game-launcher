@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 from django import forms
 
 # Using modal forms for popups.
-from bootstrap_modal_forms.mixins import PopRequestMixin, CreateUpdateAjaxMixin
 from bootstrap_modal_forms.forms import BSModalModelForm
 
 from .models import Game, Category
@@ -12,8 +11,8 @@ from .models import Game, Category
 # Forms are the interpretation of a model, which can be found
 # in a models.py file.
 # Forms enables a user to add, edit, and so on i. e. it gives
-# a user UI, from which it can will the form and the data to
-# the database.
+# a user UI, from which it can fill the form and add (change)
+# the data in the database.
 
 class GameForm(BSModalModelForm):
     class Meta:

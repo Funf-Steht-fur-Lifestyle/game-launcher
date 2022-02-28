@@ -4,11 +4,10 @@
 {% include 'topnav.html' %}
 
 {% block stylesheets %}
-<link rel="stylesheet" href="{% static 'style.css' %}" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'style.css' %}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
 {% endblock stylesheets %}
-
 
 {% block scripts %}
   <script src="{% static 'assets/js/jquery-3.2.1.min.js' %}"></script>
@@ -16,6 +15,12 @@
   <script src="{% static 'assets/js/bootstrap.min.js' %}"></script>
   <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
 {% endblock scripts %}
+
+<div class="modal fade" tabindex="-1" role="dialog" id="modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content"></div>
+  </div>
+</div>
 
 <div class="content">
   <div class="sorting">
@@ -39,15 +44,9 @@
         </a>
       </div>
     {% endfor %}
-
-    <div class="modal fade" tabindex="-1" role="dialog" id="modal">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content"></div>
-      </div>
-    </div>
     
     <div class="grid-item grid-add-item">
-	    <button id="add-game-btn" class="button" type="button" name="button"><span class="fa fa-plus"></span></button>
+      <button id="add-game-btn" class="button" type="button" name="button"><span class="fa fa-plus"></span></button>
     </div>
 
     <a href="{% url 'api_call' %}">API Call</a>
@@ -62,7 +61,12 @@
       $("#add-category-btn").modalForm({formURL: "{% url 'category_add' %}"});
       $(".edit-category-btn").each(function () {
         $(this).modalForm({
-  	formURL: $(this).data("form-url"),
+  	  formURL: $(this).data("form-url")
+        });
+      });
+      $(".delete-category-btn").each(function () {
+        $(this).modalForm({
+  	  formURL: $(this).data("form-url")
         });
       });
   

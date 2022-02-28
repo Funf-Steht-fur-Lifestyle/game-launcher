@@ -11,8 +11,8 @@
     <div class="category">
       <span class="category-title"><a href="/app/category/{{ category.id }}">{{ category.title }}</a></span>
       
-      <button class="category-btn edit-category-btn button" type="button" name="button" data-form-url="{% url 'update_category' category_id=category.id %}"><span class="fa fa-pencil"></span></button>
-      <span class="category-btn"><a href="/app/category/delete/{{ category.id }}" class="fa fa-trash"></a></span>
+      <button class="category-btn edit-category-btn button" type="button" data-form-url="{% url 'update_category' category.pk %}"><span class="fa fa-pencil"></span></button>
+      <button class="category-btn delete-category-btn button" type="button" data-form-url="{% url 'delete_category' category.pk %}"><span class="fa fa-trash"></span></button>
     </div>
   {% endfor %}
   <button id="add-category-btn" class="button" type="button" name="button"><span class="fa fa-plus"></span></button>

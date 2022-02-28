@@ -1,30 +1,22 @@
-<form method="post" action="" novalidate>
+<div class="popup-content">
+<form method="post" action="" enctype="multipart/form-data">
   {% csrf_token %}
 
-  <div class="modal-header">
-    <h3 class="modal-title">Update Category</h3>
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+ <div class="modal-header">
+    <h5 class="modal-title">Update category's name</h5>
+    <button type="button" class="button-close" data-dismiss="modal" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
 
   <div class="modal-body">
-
-    <div class="{% if form.non_field_errors %}invalid{% endif %} mb-2">
-      {% for error in form.non_field_errors %}
-        {{ error }}
-      {% endfor %}
-    </div>
-
     {% for field in form %}
-      <div class="form-group">
+      <div class="form-group{% if field.errors %} invalid{% endif %}">
         <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-        {% render_field field class="form-control" placeholder=field.label %}
-        <div class="{% if field.errors %} invalid{% endif %}">
-          {% for error in field.errors %}
-            <p class="help-block">{{ error }}</p>
-          {% endfor %}
-        </div>
+        {{ field }}
+        {% for error in field.errors %}
+          <p class="help-block">{{ error }}</p>
+        {% endfor %}
       </div>
     {% endfor %}
   </div>
@@ -34,3 +26,4 @@
   </div>
 
 </form>
+</div>

@@ -3,18 +3,33 @@
 
 {% load static %}
 
-<link rel="stylesheet" href="{% static 'game.css' %}" />
-<link rel="stylesheet" href="{% static 'topnav.css' %}" />
-<link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+{% block stylesheets %}
+  <link rel="stylesheet" href="{% static 'game.css' %}" />
+  <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+{% endblock stylesheets %}
+
+{% block scripts %}
+  <script src="{% static 'assets/js/jquery-3.2.1.min.js' %}"></script>
+  <script src="{% static 'assets/js/popper.min.js' %}"></script>
+  <script src="{% static 'assets/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+{% endblock scripts %}
+
+<div class="modal fade" tabindex="-1" role="dialog" id="modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content"></div>
+  </div>
+</div>
 
 <div class="grid-container">
   <div class="game-details">
     <div class="game-title">
       {{ game.name }}
 
-      <button type="button" name="button" data-form-url="{% url 'update_game' game_id=game.id %}"><span class="fa fa-pencil"></span></button>
-      <a href="{% url 'game_delete' game_id=game.id %}" class="fa fa-trash"></a>
+      <button class="update-game-btn button" type="button" name="button" data-form-url="{% url 'update_game' game.pk %}"><span class="fa fa-pencil"></span></button>
+      <button class="delete-game-btn button" type="button" name="button" data-form-url="{% url 'delete_game' game.pk %}"><span class="fa fa-trash"></span></button>
+      <a href="{% url 'print_game' %}" class="button"><span class="fa fa-print"></span></a>
     </div>
     
     <div class="game-thumb"><img src="{{ game.thumbnail.url }}" /></div>
@@ -34,7 +49,37 @@
     </div>
   </div>
 
+  
+
   <div class="game-description">
     <p>{{ game.desc }}</p>
   </div>
 </div>
+
+{% block extrascripts %}
+  <script type="text/javascript">
+    $(function () {
+      $(".update-game-btn").each(function () {
+        $(this).modalForm({
+  	  formURL: $(this).data("form-url")
+        });
+      });
+      $(".delete-game-btn").each(function () {
+        $(this).modalForm({
+  	  formURL: $(this).data("form-url")
+        });
+      });
+      $("#add-category-btn").modalForm({formURL: "{% url 'category_add' %}"});
+      $(".edit-category-btn").each(function () {
+        $(this).modalForm({
+  	  formURL: $(this).data("form-url")
+        });
+      });
+      $(".delete-category-btn").each(function () {
+        $(this).modalForm({
+  	  formURL: $(this).data("form-url")
+        });
+      });
+    });
+  </script>
+{% endblock extrascripts %}
