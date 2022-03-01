@@ -28,7 +28,7 @@
       {{ game.name }}
 
       <button class="update-game-btn button" type="button" name="button" data-form-url="{% url 'update_game' game.pk %}"><span class="fa fa-pencil"></span></button>
-      <button class="delete-game-btn button" type="button" name="button" data-form-url="{% url 'delete_game' game.pk %}"><span class="fa fa-trash"></span></button>
+      <a href="{% url 'delete_game' game.pk %}"><span class="fa fa-trash"></span></a>
       <a href="{% url 'print_game' %}" class="button"><span class="fa fa-print"></span></a>
     </div>
     
@@ -64,18 +64,8 @@
   	  formURL: $(this).data("form-url")
         });
       });
-      $(".delete-game-btn").each(function () {
-        $(this).modalForm({
-  	  formURL: $(this).data("form-url")
-        });
-      });
       $("#add-category-btn").modalForm({formURL: "{% url 'category_add' %}"});
       $(".edit-category-btn").each(function () {
-        $(this).modalForm({
-  	  formURL: $(this).data("form-url")
-        });
-      });
-      $(".delete-category-btn").each(function () {
         $(this).modalForm({
   	  formURL: $(this).data("form-url")
         });

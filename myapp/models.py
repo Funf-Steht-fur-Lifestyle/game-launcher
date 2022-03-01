@@ -51,9 +51,9 @@ class Game(models.Model):
         return '%s' % (self.name)
 
 
-# class Favorite(models.Model):
-#     game = models.ForeignKey(Game, on_delete=models.CASCADE)
-#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+class Favorite(models.Model):
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return '%s' % (self.game)

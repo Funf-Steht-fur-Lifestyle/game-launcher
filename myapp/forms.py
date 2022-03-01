@@ -19,7 +19,6 @@ class GameForm(BSModalModelForm):
         model = Game
         fields = {'name', 'thumbnail', 'desc', 'category'}
 
-
 class CategoryForm(BSModalModelForm):
     class Meta:
         model = Category
