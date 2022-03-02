@@ -1,0 +1,49 @@
+{% include "navbar.html" %}
+{% include "topnav.html" %}
+
+{% load static %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{% static 'style.css' %}" />
+<link rel="stylesheet" href="{% static 'topnav.css' %}" />
+<link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+{% endblock stylesheets %}
+
+{% block scripts %}
+  <script src="{% static 'assets/js/jquery-3.2.1.min.js' %}"></script>
+  <script src="{% static 'assets/js/popper.min.js' %}"></script>
+  <script src="{% static 'assets/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+{% endblock scripts %}
+
+<div class="content">
+  <div class="grid">
+    {% for favorite in favorites %}
+      {% if favorite.game.deleted == False %}
+        <div class="grid-item">
+          <a href="game/{{ game.id }}">
+            <span><div class="game-img"><img src="{{ favorite.game.thumbnail.url }}"></div></span>
+            <span><div class="game-title">{{ favorite.game.name }}</div></span>
+            <span><div class="game-price">33,45 €</div></span>
+          </a>
+          <div href="#" class="favorite-button marked" title="Unmark from favorite">
+             <button class="mark-game-as-favorite-btn inline button" type="button" name="button" data-form-url="{% url 'unmark_game_as_favorite' game_id=favorite.game.pk user_id=request.user.pk %}"><span class="fa fa-heart fa-1x"></span></a>
+             </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+{% block extrascripts %}
+  <script type="text/javascript">
+    $(function () {
+      $(".mark-game-as-favorite-btn").each(function () {
+        $(this).click(function () {
+          window.location.href = $(this).data("form-url");
+        });
+      });
+    });
+  </script>
+{% endblock extrascripts %}

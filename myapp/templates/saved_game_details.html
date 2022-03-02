@@ -26,25 +26,24 @@
 <div class="grid-container">
   <div class="game-details">
     <div class="game-title">
-      {{ game.name }}
+      {{ saved_game.game.name }}
 
-      <button class="update-game-btn button" type="button" name="button" data-form-url="{% url 'update_game' game.pk %}"><span class="fa fa-pencil"></span></button>
-      <a href="{% url 'delete_game' game.pk %}"><span class="fa fa-trash"></span></a>
+      <a href="{% url 'delete_game_from_library' saved_game.pk %}"><span class="fa fa-trash"></span></a>
       <a href="{% url 'print_game' %}" class="button"><span class="fa fa-print"></span></a>
       {% for favorite in favorites %}
-            {% if favorite.game.name == game.name %}
+            {% if favorite.game.name == saved_game.game.name %}
               <div href="#" class="favorite-button marked" title="Unmark from favorite">
-                <button class="mark-game-as-favorite-btn inline button" type="button" name="button" data-form-url="{% url 'unmark_game_as_favorite' game_id=game.pk user_id=request.user.pk %}"><span class="fa fa-heart fa-1x"></span></a>
+                <button class="mark-game-as-favorite-btn inline button" type="button" name="button" data-form-url="{% url 'unmark_game_as_favorite' game_id=saved_game.game.pk user_id=request.user.pk %}"><span class="fa fa-heart fa-1x"></span></a>
               </div>
 	    {% else %}
               <div href="#" class="favorite-button" title="Mark as favorite">
-                <button class="mark-game-as-favorite-btn inline button" type="button" name="button" data-form-url="{% url 'mark_game_as_favorite' game_id=game.pk user_id=request.user.pk %}"><span class="fa fa-heart fa-1x"></span></a>
+                <button class="mark-game-as-favorite-btn inline button" type="button" name="button" data-form-url="{% url 'mark_game_as_favorite' game_id=saved_game.game.pk user_id=request.user.pk %}"><span class="fa fa-heart fa-1x"></span></a>
               </div>
             {% endif %}
           {% endfor %}
     </div>
     
-    <div class="game-thumb"><img src="{{ game.thumbnail.url }}" /></div>
+    <div class="game-thumb"><img src="{{ saved_game.game.thumbnail.url }}" /></div>
     <div class="game-dt">
       <div class="label">Creator</div>
       <div>Epic Games</div>
@@ -53,7 +52,7 @@
       <div class="label">Publication date</div>
       <div>12.02.2022</div>
       <div class="label">Category</div>
-      <div>{{ game.category }}</div>
+      <div>{{ saved_game.game.category }}</div>
       <div class="label">Genres</div>
       <div class="genre">Action</div>
       <div class="genre">RPG</div>
@@ -64,7 +63,7 @@
   
 
   <div class="game-description">
-    <p>{{ game.desc }}</p>
+    <p>{{ saved_game.game.desc }}</p>
   </div>
 </div>
 

@@ -51,6 +51,23 @@ class Game(models.Model):
         return '%s' % (self.name)
 
 
+    def is_favorite(self):
+        favorites = Favorite.objects.all()
+        for favorite in favorites:
+            if favorite.game.name == self.name:
+                return True
+
+        return False
+
+
+class SavedGame(models.Model):
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return '%s' % (self.game)
+
+
 class Favorite(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)

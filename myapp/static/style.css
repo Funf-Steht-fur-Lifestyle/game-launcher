@@ -108,8 +108,12 @@ body {
   display: inline-block;
 }
 
+.s {
+  display: flex;
+  justify-content: space-between;
+}
+
 .import-export {
-  display: inline-block;
   float: right;
 }
 
@@ -367,3 +371,35 @@ a {
 .form-container textarea {
     margin-bottom: 10px
 }
+
+
+/* Selection menu */
+
+select {
+  display: inline-block;
+  background-color: transparent;
+  border: none;
+  padding: 0 1em 0 0;
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: inherit;
+  line-height: inherit;
+  color: #F1F1F1;
+}
+
+select::-ms-expand {
+  display: none;
+}
+
+select:focus {
+  outline: none;
+}
+
+option {
+  border-color: transparent;
+  background-color: #121212;
+  color: #F1F1F1;
+}
+
+/* Selection menu end */

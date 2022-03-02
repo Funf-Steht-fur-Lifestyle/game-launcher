@@ -17,7 +17,7 @@ from bootstrap_modal_forms.generic import BSModalCreateView, BSModalUpdateView, 
 
 from tablib import Dataset
 
-from .models import Game, Category, Favorite
+from .models import Game, Category, Favorite, SavedGame
 from .resources import GameResource, CategoryResource
 from .forms import GameForm, CategoryForm, CreateUserForm
 
@@ -51,10 +51,12 @@ def index(request):
 def game_by_id(request, game_id):
     game = Game.objects.get(pk=game_id)
     categories = Category.objects.all()
+    favorites = Favorite.objects.all()
 
     args = {}
     args['game'] = game
     args['categories'] = categories
+    args['favorites'] = favorites
 
     return render(request, 'game_details.html', args)
 
@@ -66,6 +68,25 @@ def game_delete(request, game_id):
     game.save()
 
     return HttpResponseRedirect('/app/')
+
+
+
+@login_required(login_url='/app/login')
+def sort_games_by(request, value, sort_id):
+    categories = Category.objects.all()
+    games = Game.objects.filter(deleted=False).order_by(value)
+    favorites = Favorite.objects.all()
+
+    print("THIS IS CALLED")
+
+    args = {}
+    args['categories'] = categories
+    args['games'] = games
+    args['favorites'] = favorites
+    args['sort_id'] = sort_id
+
+    print("RENDERING")
+    return render(request, 'index.html', args);
 
 
 @login_required(login_url='/app/login')
@@ -87,6 +108,61 @@ def game_undelete(request, game_id):
     return HttpResponseRedirect('/app/category/deleted')
 
 
+
+@login_required(login_url='/app/login')
+def save_game_to_library(request, game_id, user_id):
+    game = Game.objects.get(pk=game_id)
+    user = User.objects.get(pk=user_id)
+    saved_game_instance = SavedGame.objects.get_or_create(user=user, game=game)
+
+    return HttpResponseRedirect('/app')
+
+
+@login_required(login_url='/app/login')
+def saved_games_page(request):
+    saved_games = SavedGame.objects.all()
+    favorites = Favorite.objects.all()
+    categories = Category.objects.all()
+
+    args = {}
+    args['saved_games'] = saved_games
+    args['favorites'] = favorites
+    args['categories'] = categories
+
+    return render(request, 'my_library_page.html', args)
+
+
+@login_required(login_url='/app/login')
+def saved_game_details_page(request, saved_game_id):
+    game = Game.objects.get(pk=saved_game_id)
+    categories = Category.objects.all()
+    favorites = Favorite.objects.all()
+
+    args = {}
+    args['game'] = game
+    args['categories'] = categories
+    args['favorites'] = favorites
+
+    return render(request, 'saved_game_details_page.html', args)
+
+
+
+@login_required(login_url='/app/login')
+def delete_game_from_library(request, saved_game_id):
+    saved_game = SavedGame.objects.get(pk=saved_game_id)
+    saved_game.delete()
+    saved_games = SavedGame.objects.all()
+    favorites = Favorite.objects.all()
+    categories = Category.objects.all()
+
+    args = {}
+    args['saved_games'] = saved_games
+    args['favorites'] = favorites
+    args['categories'] = categories
+
+    return render(request, 'my_library_page.html', args)
+
+
 @login_required(login_url='/app/login')
 def category_page(request, category_id):
     categories = Category.objects.all()
@@ -99,6 +175,21 @@ def category_page(request, category_id):
     args['favorites'] = favorites
 
     return render(request, 'category_page.html', args)
+
+
+@login_required(login_url='/app/login')
+def category_favorites_page(request):
+    categories = Category.objects.all()
+    games = Game.objects.filter(deleted=False)
+    favorites = Favorite.objects.all();
+
+    args = {}
+    args['categories'] = categories
+    args['games'] = games
+    args['favorites'] = favorites
+
+    return render(request, 'category_favorite.html', args)
+
 
 
 @login_required(login_url='/app/login')
