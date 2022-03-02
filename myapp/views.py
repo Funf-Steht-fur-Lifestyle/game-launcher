@@ -77,15 +77,12 @@ def sort_games_by(request, value, sort_id):
     games = Game.objects.filter(deleted=False).order_by(value)
     favorites = Favorite.objects.all()
 
-    print("THIS IS CALLED")
-
     args = {}
     args['categories'] = categories
     args['games'] = games
     args['favorites'] = favorites
     args['sort_id'] = sort_id
 
-    print("RENDERING")
     return render(request, 'index.html', args);
 
 
@@ -248,8 +245,6 @@ def import_csv(request):
 
         imported_data = dataset.load(games.read().decode(), format='csv', headers=False)
         result = game_resource.import_data(dataset, dry_run=True)
-
-        print("THE RUST: ", result.has_errors())
 
         if not result.has_errors():
             game_resource.import_data(dataset, dry_run=False)
