@@ -17,7 +17,7 @@ from bootstrap_modal_forms.generic import BSModalCreateView, BSModalUpdateView, 
 
 from tablib import Dataset
 
-from .models import Game, Category, Favorite
+from .models import Game, Category, Favorite, SavedGame
 from .resources import GameResource, CategoryResource
 from .forms import GameForm, CategoryForm, CreateUserForm
 
@@ -44,19 +44,21 @@ def index(request):
     args['games'] = games
     args['favorites'] = favorites
 
-    return render(request, 'index.html', args)
+    return render(request, 'core/index.html', args)
 
 
 @login_required(login_url='/app/login')
 def game_by_id(request, game_id):
     game = Game.objects.get(pk=game_id)
     categories = Category.objects.all()
+    favorites = Favorite.objects.all()
 
     args = {}
     args['game'] = game
     args['categories'] = categories
+    args['favorites'] = favorites
 
-    return render(request, 'game_details.html', args)
+    return render(request, 'game/page.html', args)
 
 
 @login_required(login_url='/app/login')
@@ -68,14 +70,20 @@ def game_delete(request, game_id):
     return HttpResponseRedirect('/app/')
 
 
+
 @login_required(login_url='/app/login')
-def mark_unmark_as_favorite(request, game_id):
-    game = Game.objects.get(pk=game_id)
+def sort_games_by(request, value, sort_id):
+    categories = Category.objects.all()
+    games = Game.objects.filter(deleted=False).order_by(value)
+    favorites = Favorite.objects.all()
 
-    game.deleted = True
-    game.save()
+    args = {}
+    args['categories'] = categories
+    args['games'] = games
+    args['favorites'] = favorites
+    args['sort_id'] = sort_id
 
-    return HttpResponseRedirect('/app/')
+    return render(request, 'core/index.html', args);
 
 
 @login_required(login_url='/app/login')
@@ -85,6 +93,60 @@ def game_undelete(request, game_id):
     game.save()
 
     return HttpResponseRedirect('/app/category/deleted')
+
+
+@login_required(login_url='/app/login')
+def save_game_to_library(request, game_id, user_id):
+    game = Game.objects.get(pk=game_id)
+    user = User.objects.get(pk=user_id)
+    saved_game_instance = SavedGame.objects.get_or_create(user=user, game=game)
+
+    return HttpResponseRedirect('/app')
+
+
+@login_required(login_url='/app/login')
+def saved_games_page(request):
+    saved_games = SavedGame.objects.all()
+    favorites = Favorite.objects.all()
+    categories = Category.objects.all()
+
+    args = {}
+    args['saved_games'] = saved_games
+    args['favorites'] = favorites
+    args['categories'] = categories
+
+    return render(request, 'category/my_library_page.html', args)
+
+
+@login_required(login_url='/app/login')
+def saved_game_details_page(request, saved_game_id):
+    game = Game.objects.get(pk=saved_game_id)
+    categories = Category.objects.all()
+    favorites = Favorite.objects.all()
+
+    args = {}
+    args['game'] = game
+    args['categories'] = categories
+    args['favorites'] = favorites
+
+    return render(request, 'game/page.html', args)
+
+
+
+@login_required(login_url='/app/login')
+def delete_game_from_library(request, saved_game_id):
+    saved_game = SavedGame.objects.get(pk=saved_game_id)
+    saved_game.delete()
+    saved_games = SavedGame.objects.all()
+    favorites = Favorite.objects.all()
+    categories = Category.objects.all()
+
+    args = {}
+    args['saved_games'] = saved_games
+    args['favorites'] = favorites
+    args['categories'] = categories
+
+    return render(request, 'category/my_library_page.html', args)
 
 
 @login_required(login_url='/app/login')
@@ -98,7 +160,22 @@ def category_page(request, category_id):
     args['games'] = games
     args['favorites'] = favorites
 
-    return render(request, 'category_page.html', args)
+    return render(request, 'category/page.html', args)
+
+
+@login_required(login_url='/app/login')
+def category_favorites_page(request):
+    categories = Category.objects.all()
+    games = Game.objects.filter(deleted=False)
+    favorites = Favorite.objects.all();
+
+    args = {}
+    args['categories'] = categories
+    args['games'] = games
+    args['favorites'] = favorites
+
+    return render(request, 'category/favorite.html', args)
+
 
 
 @login_required(login_url='/app/login')
@@ -110,7 +187,7 @@ def category_deleted(request):
     args['categories'] = categories
     args['games'] = games
 
-    return render(request, 'category_deleted.html', args)
+    return render(request, 'category/deleted.html', args)
 
 
 @login_required(login_url='/app/login')
@@ -125,7 +202,7 @@ def category_delete(request, category_id):
     args['categories'] = categories
     args['games'] = games
 
-    return render(request, 'index.html', args)
+    return render(request, 'core/index.html', args)
 
 
 # Export does work for the user table, but not for the others.
@@ -158,8 +235,6 @@ def import_csv(request):
         imported_data = dataset.load(games.read().decode(), format='csv', headers=False)
         result = game_resource.import_data(dataset, dry_run=True)
 
-        print("THE RUST: ", result.has_errors())
-
         if not result.has_errors():
             game_resource.import_data(dataset, dry_run=False)
             return HttpResponseRedirect('/app/')
@@ -184,7 +259,7 @@ def login_page(request):
                 messages.info(request, 'Username or password is incorrect')
 
         context = {}
-        return render(request, 'login.html', context)
+        return render(request, 'auth/login.html', context)
 
 
 @login_required(login_url='/app/login')
@@ -196,14 +271,11 @@ def logout_user(request):
 
 @login_required(login_url='/app/login')
 def mark_game_as_favorite(request, game_id, user_id):
-    # if request.method == 'POST':
     game = Game.objects.get(pk=game_id)
     user = User.objects.get(pk=user_id)
     favorite_instance = Favorite.objects.get_or_create(user=user, game=game)
-    
-    #favorite_instance.save()
 
-    return HttpResponseRedirect('/app')
+    return HttpResponseRedirect('/app/game/saved')
 
 
 @login_required(login_url='/app/login')
@@ -216,7 +288,7 @@ def unmark_game_as_favorite(request, game_id, user_id):
     
     #favorite_instance.save()
 
-    return HttpResponseRedirect('/app')
+    return HttpResponseRedirect('/app/category/favorites')
 
 # @csrf_exempt is needed for the registration form to work
 # correctly. I do not know as to why, because other forms
@@ -237,7 +309,7 @@ def register_page(request):
                 return HttpResponseRedirect('/app/login')
 
         context = {'form':form}
-        return render(request, 'register.html', context)
+        return render(request, 'auth/register.html', context)
 
 
 def api_call(request):
@@ -271,7 +343,7 @@ def print_game(request):
 # update forms do not.
 class GameCreateView(BSModalCreateView):
     form_class = GameForm
-    template_name = 'game_add.html'
+    template_name = 'game/add.html'
     success_message = 'Success: Game was created.'
     success_url = reverse_lazy('index')
 
@@ -279,28 +351,28 @@ class GameCreateView(BSModalCreateView):
 class GameUpdateView(BSModalUpdateView):
     model = Game
     form_class = GameForm
-    template_name = 'game_edit.html'
+    template_name = 'game/edit.html'
     success_message = 'Success: Game was updated.'
     success_url = reverse_lazy('index')
 
 
 class CategoryCreateView(BSModalCreateView):
     form_class = CategoryForm
-    template_name = 'category_add.html'
+    template_name = 'category/add.html'
     success_message = 'Success: Category was created.'
     success_url = reverse_lazy('index')
 
 
 class GameDeleteView(BSModalDeleteView):
     model = Game
-    template_name = 'delete_game.html'
+    template_name = 'delete/game.html'
     success_message = 'Success: Game was deleted.'
     success_url = reverse_lazy('index')
 
 
 class CategoryUpdateView(BSModalUpdateView):
     model = Category
-    template_name = 'category_edit.html'
+    template_name = 'category/edit.html'
     form_class = CategoryForm
     success_message = 'Success: Category was updated.'
     success_url = reverse_lazy('index')
@@ -308,6 +380,6 @@ class CategoryUpdateView(BSModalUpdateView):
 
 class CategoryDeleteView(BSModalDeleteView):
     model = Category
-    template_name = 'delete_category.html'
+    template_name = 'delete/category.html'
     success_message = 'Success: Category was deleted.'
     success_url = reverse_lazy('index')

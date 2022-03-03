@@ -1,0 +1,41 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+
+{% block content %}
+{% block extrastylesheets %}
+  <link rel="stylesheet" href="{% static 'assets/css/game_displayer.css' %}" />
+{% endblock extrastylesheets %}
+
+
+<div class="content">
+  <div class="grid">
+    {% for favorite in favorites %}
+      {% if favorite.game.deleted == False %}
+        <div class="grid-item">
+          <a href="game/{{ game.id }}">
+            <span><div class="game-img"><img src="{{ favorite.game.thumbnail.url }}"></div></span>
+            <span><div class="game-title">{{ favorite.game.name }}</div></span>
+            <span><div class="game-price">33,45 €</div></span>
+          </a>
+          <div href="#" class="favorite-button marked" title="Unmark from favorite">
+             <button class="mark-game-as-favorite-btn inline button" type="button" name="button" data-form-url="{% url 'unmark_game_as_favorite' game_id=favorite.game.pk user_id=request.user.pk %}"><span class="fa fa-heart fa-1x"></span></a>
+             </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+{% block extrascripts %}
+  <script type="text/javascript">
+    $(function () {
+      $(".mark-game-as-favorite-btn").each(function () {
+        $(this).click(function () {
+          window.location.href = $(this).data("form-url");
+        });
+      });
+    });
+  </script>
+{% endblock extrascripts %}
+{% endblock content %}

@@ -1,0 +1,21 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'style.css' %}" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<div class="sidenav">
+  <input class="search-field" type="text">
+  <span class="category-title"><a href="{% url 'index' %}">Alle</a></span>
+  <span class="category-title"><a href="{% url 'category_favorites_page' %}">Favoriten</a></span>
+  <span class="category-title"><a href="{% url 'category_deleted' %}">Gelöschte</a></span>
+  <span class="category-title"><a href="{% url 'saved_games_page' %}">Gespeichert</a></span>
+  {% for category in categories %}
+    <div class="category">
+      <span class="category-title"><a href="{% url 'category_page' category.id %}">{{ category.title }}</a></span>
+      <button class="category-btn edit-category-btn button" type="button" data-form-url="{% url 'update_category' category.pk %}"><span class="fa fa-pencil"></span></button>
+      <button class="category-btn button" type="button"><a href="{% url 'delete_category' category.pk %}"><span class="fa fa-trash"></span></a></button>
+    </div>
+  {% endfor %}
+  <button id="add-category-btn" class="button" type="button" name="button"><span class="fa fa-plus"></span></button>
+</div>
+

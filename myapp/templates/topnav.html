@@ -1,9 +1,0 @@
-{% load static %}
-
-<link rel="stylesheet" href="{% static 'topnav.css' %}" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-<div class="topnav">
-  <span class="category-title"><a href="{% url 'logout' %}">Logout</a></span>
-  <span class="category-title"><div id="login-message"><p>Hello, {{ request.user }} </p></div></span>
-</div>

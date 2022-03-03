@@ -1,0 +1,24 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+{% block extrastylesheets %}
+  <link rel="stylesheet" href="{% static 'assets/css/game_displayer.css' %}" />
+{% endblock extrastylesheets %}
+
+<div class="content">
+  <div class="grid">
+    {% for game in games %}
+      <div class="grid-item">
+  	<span><div class="game-img"><img src="{{ game.thumbnail.url }}"></div></span>
+  	<span><div class="game-title">{{ game.name }}</div></span>
+	<span><a href="{% url 'game_undelete' game.id %}"><input class="undelete-btn" type="submit" value="Undelete"></input></a></span>
+      </div>
+    {% endfor %}
+    
+  </div>
+</div>
+
+{% endblock content %}

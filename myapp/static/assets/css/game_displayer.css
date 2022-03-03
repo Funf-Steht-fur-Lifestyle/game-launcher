@@ -1,0 +1,94 @@
+.grid-item a {
+  color: #EDDFD8;
+}
+
+.game-img {
+  padding-bottom: 10px;
+}
+
+.game-title {
+  padding-bottom: 10px;
+  font-size: 1em;
+  font-weight: bold;
+  display: block-inline;
+}
+
+.game-price {
+  font-size: 1em;
+}
+
+a {
+  text-decoration: none;
+}
+
+.grid-add-item {
+  display: -webkit-box;  /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+  display: -ms-flexbox;  /* TWEENER - IE 10 */
+  display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+  display: flex;         /* NEW, Spec - Firefox, Chrome, Opera */
+
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 5.2em;
+  background-color: rgba(2, 2, 2, 0.1); 
+}
+
+.grid img {
+  width: 30vh;
+  height: 30vh;
+  object-fit: cover;
+}
+
+
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.brightness {
+  display: inline-block;
+
+}
+.brightness img:hover {
+  opacity: .5;
+}
+
+.favorite-button {
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  border-radius: 10rem;
+  background-color: transparent;
+  border: transparent;
+  item-align: right;
+  text-align: right;
+  float: right;
+}
+
+.undelete-btn {
+  background: #0074E4 !important;
+  border-color: #0074E4 !important;
+  color: white !important;
+  float: right;
+}
+
+.undelete-btn:focus {
+  box-shadow: none !important;
+  outline: 0px !important;
+}
+
+.inline {
+  width: 100%;
+}
+
+.fa-heart {
+  color: white;
+}
+
+.marked .fa-heart {
+  color: #0074E4;
+}

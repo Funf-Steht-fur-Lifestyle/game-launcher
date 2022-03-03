@@ -1,11 +1,12 @@
-#!/nix/store/wl02plhc6zf84m6x9984l42wnnnbly5m-python3-3.9.6/bin/python
+#!/usr/bin/env python
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
 
 
 def main():
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mysite.settings')
+    """Run administrative tasks."""
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'game_launcher.settings')
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
