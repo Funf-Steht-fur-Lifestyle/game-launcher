@@ -1,8 +1,15 @@
+from importlib.resources import path
 from django.shortcuts import render
 
 import requests
 import csv
 import ctypes
+import pdfkit
+import PyPDF2
+import os
+import subprocess
+import webbrowser
+
 
 from django.urls import reverse_lazy
 from django.http import HttpResponse, HttpResponseRedirect
@@ -260,8 +267,35 @@ def api_call(request):
 
 
 # Define your print method here
-def print_game(request):
-    return HttpResponseRedirect('/app/game/print')
+def print_game(request, game_id):
+    
+    #Create PDF in Folder
+    cookies = request.COOKIES
+    options = {
+    'page-size':'A4',
+    'encoding':'utf-8', 
+    'margin-top':'0cm',
+    'margin-bottom':'0cm',
+    'margin-left':'0cm',
+    'margin-right':'0cm',
+    'dpi':400,
+    'cookie' : [('csrftoken',cookies['csrftoken']),('sessionid',cookies["sessionid"])]
+}
+    url = "http://localhost:8000/app/game/print/" + str(game_id)
+    print(game_id)
+    pdfkit.from_url(url, 'media/test3.pdf', options, verbose=True)
+
+    #Open PDF 
+
+    pathpdf = os.getcwd()
+    #os.open(path, os.O_RDONLY)
+
+    #subprocess.Popen([path],shell=True)
+    print(pathpdf)
+
+    webbrowser.open("file://"+ pathpdf +"/media/test3.pdf")
+
+    return HttpResponseRedirect('/app')
 
 
 # For the popups to work, we need to create classes that extend
