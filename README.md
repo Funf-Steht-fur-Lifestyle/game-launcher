@@ -2,7 +2,6 @@
 
 ## Probieren Sie mal aus!
 
-to start the server do the following:
 Um dieses Projekt auszuprobieren, müssen Sie Python 3 auf Ihrem Rechner
 installiert haben. Python 3 können Sie auf folgenden Link herunterlanden
 und installieren:
