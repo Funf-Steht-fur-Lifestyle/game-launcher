@@ -3,7 +3,7 @@
 ## Probieren Sie mal aus!
 
 Um dieses Projekt auszuprobieren, müssen Sie Python 3 auf Ihrem Rechner
-installiert haben. Python 3 können Sie auf folgenden Link herunterlanden
+installiert haben. Python 3 können Sie auf folgenden Link herunterladen
 und installieren:
 
 https://www.python.org/downloads/
@@ -24,11 +24,15 @@ source .venv/bin/activate
 
 * Windows
 
-Falls Sie PowerShell im Windows nutzen, müssen Sie anstatt .venv/bin/activate
-den .venv/bin/activate.ps1 Befehl eingeben.
-
 ```bash
 .venv/bin/activate
+```
+
+Falls Sie PowerShell im Windows nutzen, müssen Sie den folgenden Befehl
+ausführen:
+
+```bash
+.venv/bin/activate.ps1
 ```
 
 Wenn Sie sich im virtualen Umgebung finden, müssen Sie benötigte Modulen,

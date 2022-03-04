@@ -35,7 +35,7 @@ django-bootstrap-modal-forms -> https://pypi.org/project/django-bootstrap-modal-
 django-import-export -> https://django-import-export.readthedocs.io/en/latest/
 
 Damit Sie besser verstehen können, was hier geschrieben ist. Machen Sie keine
-Sorge, wenn Sie die Dokumentationen lesen nicht können, ich verusche so eklären,
+Sorge, wenn Sie die Dokumentationen lesen nicht können, ich versuche so eklären,
 damit es für jeden klar ist.
 
 ### Grundlagende Struktur
@@ -50,7 +50,7 @@ gibt ihm einen Namen, den Sie angegeben haben. In unsere Fall wird es dann
 game_launcher sein.
 
 Anwendungen sind kleinen Komponenten, die zusammen Ihr Projekt ausmachen. Sie
-sind die Merkmale Ihres Projekts. Wie unseren Fall:
+sind die Merkmale Ihres Projekts. Wie zum Beispiel:
 
 * Spiel - Logik für Spieler
 * Kategorien - Logik für Kategorien
@@ -59,7 +59,7 @@ sind die Merkmale Ihres Projekts. Wie unseren Fall:
 Jede Anwendung konzentriert sich auf einen einzelnen logischen Teil Ihres
 Projekts.
 
-Derzeitig im Projekt gibt es eine Anwendung, die myapp heißt. Es is ein
+Derzeitig im Projekt gibt es eine Anwendung, die myapp heißt. Es ist ein
 schlechtes Design, aber da ich am Anfang nicht über das Design fokusiert habe
 und nur um das Projekt zu Ende zu bringen, habe ich so aufgebaut.
 
@@ -84,20 +84,19 @@ handhaben.
 ### Weiterentwicklung
 
 Wenn Sie eine Seite für diesen Projekt erstellen wollen, müssen Sie ein Template
-erstellen. Ein Template ist ein HTML-Datei, die kann Django-Template-Syntax nutzen
-kann. Um Django-Template-Syntax zu verstehen, empfehle ich folgende Dokumentaion
-anlesen:
+erstellen. Ein Template ist ein HTML-Datei, die Django-Template-Syntax nutzen kann.
+Um Django-Template-Syntax zu verstehen, empfehle ich folgende Dokumentaion anlesen:
 
 https://docs.djangoproject.com/en/4.0/ref/templates/language/
 
-Jede Template sollte ein oder mehrer urls haben, die zu dem Temmplate zeigt. Das
+Jede Template sollte ein oder mehrer urls haben, die zu dem Template zeigt. Das
 heißt, dass Sie müssen für Ihre erstelltes Template ein url definieren, mit dem
 man Ihre Template erreichen kann. Das können Sie im urls.py Datei machen.
 
 Ein url braucht ein Ansicht, damit das URL weißt, was er machen sollte. Sie können
 Ansichten in views.py Datei definieren. Ein Ansicht ist meisten einfach eine Methode,
 die macht ein HTTP GET oder POST request und rendert Ihre definierte Template. Ein
-Ding zum beoabachten ist, dass das Ansicht sollte immer ein Anfrage als Paramaeter
+Ding zum beobachten ist, dass das Ansicht sollte immer ein Anfrage als Paramaeter
 haben und immer irgendwelche Template zurückgeben.
 
 Wenn Sie das alles gemacht haben, sollte alles funktionieren.
