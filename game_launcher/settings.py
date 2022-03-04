@@ -133,6 +133,7 @@ MEDIA_URL = '/media/'
 # Use database transactions on data import.
 IMPORT_EXPORT_USE_TRANSACTIONS = True
 
+AUTH_USER_MODEL = 'myapp.User'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 DATETIME_FORMAT = 'd-m-Y' 

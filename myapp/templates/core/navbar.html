@@ -12,10 +12,14 @@
   {% for category in categories %}
     <div class="category">
       <span class="category-title"><a href="{% url 'category_page' category.id %}">{{ category.title }}</a></span>
-      <button class="category-btn edit-category-btn button" type="button" data-form-url="{% url 'update_category' category.pk %}"><span class="fa fa-pencil"></span></button>
-      <button class="category-btn button" type="button"><a href="{% url 'delete_category' category.pk %}"><span class="fa fa-trash"></span></a></button>
+      {% if request.user.developer == True %}
+        <button class="category-btn edit-category-btn button" type="button" data-form-url="{% url 'update_category' category.pk %}"><span class="fa fa-pencil"></span></button>
+        <button class="category-btn button" type="button"><a href="{% url 'delete_category' category.pk %}"><span class="fa fa-trash"></span></a></button>
+      {% endif %}
     </div>
   {% endfor %}
-  <button id="add-category-btn" class="button" type="button" name="button"><span class="fa fa-plus"></span></button>
+  {% if request.user.developer == True %}
+    <button id="add-category-btn" class="button" type="button" name="button"><span class="fa fa-plus"></span></button>
+  {% endif %}
 </div>
 

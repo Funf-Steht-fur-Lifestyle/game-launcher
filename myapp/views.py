@@ -9,7 +9,6 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 
@@ -17,7 +16,7 @@ from bootstrap_modal_forms.generic import BSModalCreateView, BSModalUpdateView, 
 
 from tablib import Dataset
 
-from .models import Game, Category, Favorite, SavedGame
+from .models import User, Game, Category, Favorite, SavedGame
 from .resources import GameResource, CategoryResource
 from .forms import GameForm, CategoryForm, CreateUserForm
 
@@ -25,9 +24,9 @@ from .forms import GameForm, CategoryForm, CreateUserForm
 # should be represented by the browser. For example loading an
 # index.html file or making the HTTP GET/POST request to the API.
 
-# Every method in this file, that requires for the user to be logged
+# Every method in this file, that requires for the User to be logged
 # in to access it, must be marked with the @login_required(login_url='/app/login')
-# annotation. Otherwise the user, that is not logged in will be able to
+# annotation. Otherwise the User, that is not logged in will be able to
 # access it.
 #
 # This approach is quite messy and it should be replaced by the MIDDLEWARE
@@ -98,7 +97,7 @@ def game_undelete(request, game_id):
 @login_required(login_url='/app/login')
 def save_game_to_library(request, game_id, user_id):
     game = Game.objects.get(pk=game_id)
-    user = User.objects.get(pk=user_id)
+    user = user.objects.get(pk=user_id)
     saved_game_instance = SavedGame.objects.get_or_create(user=user, game=game)
 
     return HttpResponseRedirect('/app')
@@ -205,7 +204,7 @@ def category_delete(request, category_id):
     return render(request, 'core/index.html', args)
 
 
-# Export does work for the user table, but not for the others.
+# Export does work for the User table, but not for the others.
 @login_required(login_url='/app/login')
 def export_csv(request):
     game_resource = GameResource()
@@ -256,7 +255,7 @@ def login_page(request):
                 login(request, user)
                 return HttpResponseRedirect('/app')
             else:
-                messages.info(request, 'Username or password is incorrect')
+                messages.info(request, 'username or password is incorrect')
 
         context = {}
         return render(request, 'auth/login.html', context)
@@ -272,7 +271,7 @@ def logout_user(request):
 @login_required(login_url='/app/login')
 def mark_game_as_favorite(request, game_id, user_id):
     game = Game.objects.get(pk=game_id)
-    user = User.objects.get(pk=user_id)
+    user = user.objects.get(pk=user_id)
     favorite_instance = Favorite.objects.get_or_create(user=user, game=game)
 
     return HttpResponseRedirect('/app/game/saved')
@@ -282,7 +281,7 @@ def mark_game_as_favorite(request, game_id, user_id):
 def unmark_game_as_favorite(request, game_id, user_id):
     # if request.method == 'POST':
     game = Game.objects.get(pk=game_id)
-    user = User.objects.get(pk=user_id)
+    user = user.objects.get(pk=user_id)
     favorite_instance = Favorite.objects.get(user=user, game=game)
     favorite_instance.delete()
     

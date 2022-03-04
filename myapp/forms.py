@@ -1,5 +1,6 @@
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
+from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
 from django import forms
 
@@ -7,6 +8,8 @@ from django import forms
 from bootstrap_modal_forms.forms import BSModalModelForm
 
 from .models import Game, Category
+
+User = get_user_model()
 
 # Forms are the interpretation of a model, which can be found
 # in a models.py file.
@@ -28,4 +31,10 @@ class CategoryForm(BSModalModelForm):
 class CreateUserForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ['username', 'email', 'password1', 'password2']
+        fields = ('username', 'email', 'password1', 'password2')
+
+
+class ChangeUserForm(UserChangeForm):
+    class Meta:
+        model = User
+        fields = ('__all__')

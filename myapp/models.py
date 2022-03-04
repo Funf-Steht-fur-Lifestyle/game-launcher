@@ -1,5 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.conf import settings
+from django.contrib.auth.models import AbstractUser
 
 from game_launcher import settings
 
@@ -15,13 +16,6 @@ class Category(models.Model):
         return '%s' % (self.title)
 
 
-class Developer(models.Model):
-    name = models.CharField(max_length=200)
-
-    def __str__(self):
-        return '%s' % (self.name)
-
-
 class Publisher(models.Model):
     publisher = models.CharField(max_length=200)
 
@@ -29,14 +23,19 @@ class Publisher(models.Model):
         return '%s' % (self.name)
 
 
+class User(AbstractUser):
+    developer = models.BooleanField('Entwickler', default=False)
+
+    def __str__(self):
+        return '%s' % (self.username)
+
+
 class Game(models.Model):
     name = models.CharField('Name', max_length=200)
     thumbnail = models.ImageField('Thumbnail', upload_to='img/', default='default-image.jpg', blank=True)
     desc = models.TextField('Beschreibung')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Kategorie')
-    # creator = models.ForeignKey(User, on_delete=models.CASCADE)
     # publisher = models.ForeignKey(Publisher, on_delete=models.CASCADE, default=0)
-    # developer = models.ForeignKey(Developer, on_delete=models.CASCADE, default=0)
     publication_date = models.DateTimeField(default=datetime.now, blank=True)
     deleted = models.BooleanField('Gelöscht', default=False)
 
@@ -55,7 +54,7 @@ class Game(models.Model):
 
 class SavedGame(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     
     def __str__(self):
         return '%s' % (self.game)
@@ -63,7 +62,7 @@ class SavedGame(models.Model):
 
 class Favorite(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def __str__(self):
         return '%s' % (self.game)

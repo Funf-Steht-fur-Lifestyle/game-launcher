@@ -36,9 +36,11 @@
         </div>
       {% endfor %}
   
-      <div class="grid-item grid-add-item">
-        <button id="add-game-btn" class="button" type="button" name="button"><span class="fa fa-plus"></span></button>
-      </div>
+      {% if request.user.developer == True %}
+        <div class="grid-item grid-add-item">
+          <button id="add-game-btn" class="button" type="button" name="button"><span class="fa fa-plus"></span></button>
+        </div>
+      {% endif %}
   
       <a href="{% url 'api_call' %}">API Call</a>
   
