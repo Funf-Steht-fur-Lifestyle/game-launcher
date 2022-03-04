@@ -32,4 +32,5 @@ urlpatterns = [
     path('register', views.register_page, name='register_page'),
     path('logout', views.logout_user, name='logout'),
     path('api-call', views.api_call, name='api_call'),
+    path('game/print/', views.print_game_redirect_to_print, name="print_game_redirect_to_print"),
 ]

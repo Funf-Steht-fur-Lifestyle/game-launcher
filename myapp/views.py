@@ -281,16 +281,23 @@ def print_game(request, game_id):
     'dpi':400,
     'cookie' : [('csrftoken',cookies['csrftoken']),('sessionid',cookies["sessionid"])]
 }
-    url = "http://localhost:8000/app/game/print/" + str(game_id)
-    print(game_id)
+    url = "http://localhost:8000/app/game/{}".format(game_id) #+ str(game_id)
+
+    #print(url)
+
     pdfkit.from_url(url, 'media/test3.pdf', options, verbose=True)
 
-    #Open PDF 
+    pathpdf = os.getcwd()
+
+    print(pathpdf)
+
+    webbrowser.open("file://"+ pathpdf +"/media/test3.pdf")
+
+    return HttpResponseRedirect('/app')
+
+def print_game_redirect_to_print(request):   
 
     pathpdf = os.getcwd()
-    #os.open(path, os.O_RDONLY)
-
-    #subprocess.Popen([path],shell=True)
     print(pathpdf)
 
     webbrowser.open("file://"+ pathpdf +"/media/test3.pdf")
