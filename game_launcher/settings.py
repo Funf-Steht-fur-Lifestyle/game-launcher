@@ -134,3 +134,7 @@ MEDIA_URL = '/media/'
 IMPORT_EXPORT_USE_TRANSACTIONS = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+DATETIME_FORMAT = 'd-m-Y' 
+USE_L10N = False
+USE_TZ = False

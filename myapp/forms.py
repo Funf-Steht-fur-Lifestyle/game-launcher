@@ -17,7 +17,7 @@ from .models import Game, Category
 class GameForm(BSModalModelForm):
     class Meta:
         model = Game
-        fields = {'name', 'thumbnail', 'desc', 'category'}
+        fields = {'name', 'thumbnail', 'desc', 'category', 'publication_date'}
 
 class CategoryForm(BSModalModelForm):
     class Meta:
