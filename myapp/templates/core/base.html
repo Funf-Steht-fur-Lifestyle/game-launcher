@@ -7,8 +7,6 @@
     {% block stylesheets %}
       <link rel="stylesheet" href="{% static 'assets/css/base.css' %}" />
       <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}" />
-      <link rel="stylesheet" href="{% static 'assets/css/topnav.css' %}" />
-      <link rel="stylesheet" href="{% static 'assets/css/navbar.css' %}" />
       <link rel="stylesheet" href="{% static 'assets/css/popup.css' %}" />
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     {% endblock stylesheets %}
@@ -23,9 +21,10 @@
       <script src="{% static 'assets/js/jquery-3.2.1.min.js' %}"></script>
       <script src="{% static 'assets/js/popper.min.js' %}"></script>
       <script src="{% static 'assets/js/bootstrap.min.js' %}"></script>
-      <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+      <script src="{% static 'assets/js/jquery.bootstrap.modal.forms.js' %}"></script>
       <script type="text/javascript">
         $(function() {
+          $("#add-category-btn").modalForm({formURL: "{% url 'category_add' %}"});
           $(".edit-category-btn").each(function() {
           $(this).modalForm({
             formURL: $(this).data("form-url")

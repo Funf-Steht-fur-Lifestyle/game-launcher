@@ -9,7 +9,7 @@ from datetime import datetime
 # It is currently work in progress (WIP).
 
 class Category(models.Model):
-    title = models.CharField(max_length=200)
+    title = models.CharField("Kategorie", max_length=200)
 
     def __str__(self):
         return '%s' % (self.title)
@@ -37,15 +37,15 @@ class Publisher(models.Model):
 
 
 class Game(models.Model):
-    name = models.CharField(max_length=200)
-    thumbnail = models.ImageField(upload_to='img/', blank=True)
-    desc = models.TextField("Description")
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    name = models.CharField("Name", max_length=200)
+    thumbnail = models.ImageField("Thumbnail", upload_to='img/', blank=True)
+    desc = models.TextField("Beschreibung")
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name="Kategorie")
     # creator = models.ForeignKey(User, on_delete=models.CASCADE)
     # publisher = models.ForeignKey(Publisher, on_delete=models.CASCADE, default=0)
     # developer = models.ForeignKey(Developer, on_delete=models.CASCADE, default=0)
     # publication_date = models.DateTimeField(default=datetime.now, blank=True)
-    deleted = models.BooleanField(default=False)
+    deleted = models.BooleanField("Gelöscht", default=False)
 
     def __str__(self):
         return '%s' % (self.name)
