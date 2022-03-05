@@ -208,6 +208,44 @@ def api_call(request):
     return HttpResponse('Error')
 
 
+def igdb_api_authentication(request):
+
+    r = requests.post('https://id.twitch.tv/oauth2/token?client_id=phutxcabah8hduf96zsx7j62s7wkwn&client_secret=jlth8qse7y6ndfgiwnzkyeuogwsxx7&grant_type=client_credentials')
+
+    print(r)
+    print("HTTP Status Code: ", r.status_code)
+    print(r.json())
+
+    if r.status_code == 200:
+        return r.json()["access_token"]
+    
+    print("Could not authenticate at twitch.tv")
+    return 1
+
+def igdb__api_search_game(request, searchTerm):
+ 
+    url = "https://api.igdb.com/v4/games"
+
+    payload = "search \""+ searchTerm + " \";\r\nfields name,rating;\r\n"
+    headers = {
+        'Authorization': 'Bearer fm9ft7bdx7gd1qy82fb9ow7vzr1vcw',
+        'Client-ID': 'phutxcabah8hduf96zsx7j62s7wkwn',
+        'Content-Type': 'text/plain'
+    }
+
+    response = requests.request("POST", url, headers=headers, data=payload)
+
+    print(response)
+    print("HTTP Status Code: ", response.status_code)
+    print(response.json())
+
+    if response.status_code == 200:
+        return response.json() # returns a dict with fields "id", "name", and evtl. "rating"
+    
+    print("Could not authenticate at twitch.tv")
+    return 1
+
+
 # For the popups to work, we need to create classes that extend
 # the original view (BSModelCreate|Update|DeleteView).
 #
