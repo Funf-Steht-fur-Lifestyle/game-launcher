@@ -15,6 +15,10 @@ body {
   color: #F1F1F1;
 }
 
+.poup-content input {
+  background-color: white;
+}
+
 .button-close {
   background: transparent !important;
   border-color: transparent !important;
@@ -60,21 +64,27 @@ body {
     opacity: .5;
 }
 
-.like-button {
-  color: #0074E4;
+.favorite-button {
+  color: white;
   font-size: 20px;
   cursor: pointer;
   border-radius: 10rem;
   background-color: transparent;
   border: transparent;
-  display: none;
+  item-align: right;
+  text-align: right;
+  float: right;
+}
+
+.content {
+  color: #F1F1F1;
 }
 
 .undelete-btn {
-  width: 100%;
   background: #0074E4 !important;
   border-color: #0074E4 !important;
   color: white !important;
+  float: right;
 }
 
 .undelete-btn:focus {
@@ -82,19 +92,28 @@ body {
   outline: 0px !important;
 }
 
+.inline {
+  width: 100%;
+}
+
 .fa-heart {
-  position: absolute;
-  z-index: 2;
+  color: white;
+}
+
+.marked .fa-heart {
   color: #0074E4;
-  position: absolute;
 }
 
 .sorting {
   display: inline-block;
 }
 
+.s {
+  display: flex;
+  justify-content: space-between;
+}
+
 .import-export {
-  display: inline-block;
   float: right;
 }
 
@@ -114,6 +133,7 @@ body {
   padding-bottom: 10px;
   font-size: 1em;
   font-weight: bold;
+  display: block-inline;
 }
 
 .game-price {
@@ -180,6 +200,10 @@ a {
   transition: 0.3s;
 }
 
+.category-btn {
+  display: none
+}
+
 /* When you mouse over the navigation links, change their color */
 .sidenav a:hover {
   color: #f1f1f1;
@@ -205,6 +229,10 @@ a {
 
 .category a {
   display: inline-block;
+}
+
+.category-btn {
+  display: none;
 }
 
 /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
@@ -343,3 +371,35 @@ a {
 .form-container textarea {
     margin-bottom: 10px
 }
+
+
+/* Selection menu */
+
+select {
+  display: inline-block;
+  background-color: transparent;
+  border: none;
+  padding: 0 1em 0 0;
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: inherit;
+  line-height: inherit;
+  color: #F1F1F1;
+}
+
+select::-ms-expand {
+  display: none;
+}
+
+select:focus {
+  outline: none;
+}
+
+option {
+  border-color: transparent;
+  background-color: #121212;
+  color: #F1F1F1;
+}
+
+/* Selection menu end */

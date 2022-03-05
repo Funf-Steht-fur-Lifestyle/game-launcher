@@ -4,11 +4,10 @@
 {% include 'topnav.html' %}
 
 {% block stylesheets %}
-<link rel="stylesheet" href="{% static 'style.css' %}" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'style.css' %}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
 {% endblock stylesheets %}
-
 
 {% block scripts %}
   <script src="{% static 'assets/js/jquery-3.2.1.min.js' %}"></script>
@@ -17,41 +16,49 @@
   <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
 {% endblock scripts %}
 
+<div class="modal fade" tabindex="-1" role="dialog" id="modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content"></div>
+  </div>
+</div>
+
 <div class="content">
   <div class="sorting">
-    <span><p>Sortiere nach: </p></span>
+    <div class="s">
+      <span><p>Sortiere nach: </p></span>
+      <div class="select">
+        <select id="standard-select">
+          <option id="name" value="1">Alphabetisch</option>
+          <option id="price" value="2">Pries: Aufsteigend</option>
+          <option id="-price" value="3">Pries: Absteigend</option>
+          <option id="" value="4">Bewertung: Aufsteigend</option>
+          <option id="" value="5">Bewertung: Absteigend</option>
+        </select>
+      </div>
+    </div>
+    <div class="import-export">
+      <span><a href="{% url 'import_csv' %}">Import</a></span>
+      <span><a href="{% url 'export_csv' %}">Export</a></span>
+    </div>
   </div>
-  <div class="import-export">
-    <span><a href="{% url 'import_csv' %}">Import</a></span>
-    <span><a href="{% url 'export_csv' %}">Export</a></span>
-  </div>
-  
   <div class="grid">
     {% for game in games %}
       <div class="grid-item">
-  	<a href="game/{{ game.id }}">
-  	<div href="#" class="like-button" title="Like Button">
-          <i class="fa fa-heart fa-1x"></i>
-        </div>
-  	<span><div class="game-img brightness"><img src="{{ game.thumbnail.url }}"></div></span>
-  	<span><div class="game-title">{{ game.name }}</div></span>
-  	<span><div class="game-price">33,45 €</div></span>
+        <a href="game/{{ game.id }}">
+        <div class="game-img brightness"><img src="{{ game.thumbnail.url }}"></div>
+        <div class="game-title">{{ game.name }}</div>
+        <div class="game-price">33,45 €</div>
         </a>
+	<a href="{% url 'save_game_to_library' game_id=game.id user_id=request.user.id %}">Save</a>
       </div>
     {% endfor %}
 
-    <div class="modal fade" tabindex="-1" role="dialog" id="modal">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content"></div>
-      </div>
-    </div>
-    
     <div class="grid-item grid-add-item">
-	    <button id="add-game-btn" class="button" type="button" name="button"><span class="fa fa-plus"></span></button>
+      <button id="add-game-btn" class="button" type="button" name="button"><span class="fa fa-plus"></span></button>
     </div>
 
     <a href="{% url 'api_call' %}">API Call</a>
-    
+
   </div>
 </div>
 
@@ -62,10 +69,35 @@
       $("#add-category-btn").modalForm({formURL: "{% url 'category_add' %}"});
       $(".edit-category-btn").each(function () {
         $(this).modalForm({
-  	formURL: $(this).data("form-url"),
+          formURL: $(this).data("form-url")
         });
       });
-  
+      $(".mark-game-as-favorite-btn").each(function () {
+        $(this).click(function () {
+          window.location.href = $(this).data("form-url");
+        });
+      });
+
+      $("#standard-select").on('change', function () {
+        var value = $(this).children(":selected").attr("id");
+        var id = $(this).val();
+        window.location.href = `/app/sortBy=${value}&sortId=${id}`;
+      });
     });
+
+    $("#standard-select").val({{ sort_id }});
+
+    function dropDown(event) {
+      event.target.parentElement.children[1].classList.remove("d-none");
+      document.getElementById("overlay").classList.remove("d-none");
+    }
+
+    function hide(event) {
+      var items = document.getElementsByClassName('menu');
+      for (let i = 0; i < items.length; i++) {
+          items[i].classList.add("d-none");
+      }
+      document.getElementById("overlay").classList.add("d-none");
+    }
   </script>
 {% endblock extrascripts %}

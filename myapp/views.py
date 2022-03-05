@@ -2,29 +2,31 @@ from django.shortcuts import render
 
 import requests
 import csv
+import ctypes
 
 from django.urls import reverse_lazy
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 
-from bootstrap_modal_forms.generic import BSModalCreateView, BSModalUpdateView
+from bootstrap_modal_forms.generic import BSModalCreateView, BSModalUpdateView, BSModalDeleteView
 
 from tablib import Dataset
 
-from .models import Game, Category
-from .resources import GameResource
+from .models import Game, Category, Favorite, SavedGame
+from .resources import GameResource, CategoryResource
 from .forms import GameForm, CategoryForm, CreateUserForm
 
-# This fiels contains the logic for the URLs i. e. it tells what
+# This file contains the logic for the URLs i. e. it tells what
 # should be represented by the browser. For example loading an
 # index.html file or making the HTTP GET/POST request to the API.
 
 # Every method in this file, that requires for the user to be logged
-# in to access it, must contain the @login_required(login_url='/app/login')
+# in to access it, must be marked with the @login_required(login_url='/app/login')
 # annotation. Otherwise the user, that is not logged in will be able to
 # access it.
 #
@@ -35,10 +37,12 @@ from .forms import GameForm, CategoryForm, CreateUserForm
 def index(request):
     categories = Category.objects.all()
     games = Game.objects.filter(deleted=False)
+    favorites = Favorite.objects.all()
 
     args = {}
     args['categories'] = categories
     args['games'] = games
+    args['favorites'] = favorites
 
     return render(request, 'index.html', args)
 
@@ -47,10 +51,12 @@ def index(request):
 def game_by_id(request, game_id):
     game = Game.objects.get(pk=game_id)
     categories = Category.objects.all()
+    favorites = Favorite.objects.all()
 
     args = {}
     args['game'] = game
     args['categories'] = categories
+    args['favorites'] = favorites
 
     return render(request, 'game_details.html', args)
 
@@ -58,6 +64,32 @@ def game_by_id(request, game_id):
 @login_required(login_url='/app/login')
 def game_delete(request, game_id):
     game = Game.objects.get(pk=game_id)
+    game.deleted = True
+    game.save()
+
+    return HttpResponseRedirect('/app/')
+
+
+
+@login_required(login_url='/app/login')
+def sort_games_by(request, value, sort_id):
+    categories = Category.objects.all()
+    games = Game.objects.filter(deleted=False).order_by(value)
+    favorites = Favorite.objects.all()
+
+    args = {}
+    args['categories'] = categories
+    args['games'] = games
+    args['favorites'] = favorites
+    args['sort_id'] = sort_id
+
+    return render(request, 'index.html', args);
+
+
+@login_required(login_url='/app/login')
+def mark_unmark_as_favorite(request, game_id):
+    game = Game.objects.get(pk=game_id)
+
     game.deleted = True
     game.save()
 
@@ -73,16 +105,88 @@ def game_undelete(request, game_id):
     return HttpResponseRedirect('/app/category/deleted')
 
 
+
+@login_required(login_url='/app/login')
+def save_game_to_library(request, game_id, user_id):
+    game = Game.objects.get(pk=game_id)
+    user = User.objects.get(pk=user_id)
+    saved_game_instance = SavedGame.objects.get_or_create(user=user, game=game)
+
+    return HttpResponseRedirect('/app')
+
+
+@login_required(login_url='/app/login')
+def saved_games_page(request):
+    saved_games = SavedGame.objects.all()
+    favorites = Favorite.objects.all()
+    categories = Category.objects.all()
+
+    args = {}
+    args['saved_games'] = saved_games
+    args['favorites'] = favorites
+    args['categories'] = categories
+
+    return render(request, 'my_library_page.html', args)
+
+
+@login_required(login_url='/app/login')
+def saved_game_details_page(request, saved_game_id):
+    game = Game.objects.get(pk=saved_game_id)
+    categories = Category.objects.all()
+    favorites = Favorite.objects.all()
+
+    args = {}
+    args['game'] = game
+    args['categories'] = categories
+    args['favorites'] = favorites
+
+    return render(request, 'saved_game_details_page.html', args)
+
+
+
+@login_required(login_url='/app/login')
+def delete_game_from_library(request, saved_game_id):
+    saved_game = SavedGame.objects.get(pk=saved_game_id)
+    saved_game.delete()
+    saved_games = SavedGame.objects.all()
+    favorites = Favorite.objects.all()
+    categories = Category.objects.all()
+
+    args = {}
+    args['saved_games'] = saved_games
+    args['favorites'] = favorites
+    args['categories'] = categories
+
+    return render(request, 'my_library_page.html', args)
+
+
 @login_required(login_url='/app/login')
 def category_page(request, category_id):
     categories = Category.objects.all()
     games = Game.objects.filter(category=category_id, deleted=False)
+    favorites = Favorite.objects.all();
 
     args = {}
     args['categories'] = categories
     args['games'] = games
+    args['favorites'] = favorites
 
     return render(request, 'category_page.html', args)
+
+
+@login_required(login_url='/app/login')
+def category_favorites_page(request):
+    categories = Category.objects.all()
+    games = Game.objects.filter(deleted=False)
+    favorites = Favorite.objects.all();
+
+    args = {}
+    args['categories'] = categories
+    args['games'] = games
+    args['favorites'] = favorites
+
+    return render(request, 'category_favorite.html', args)
+
 
 
 @login_required(login_url='/app/login')
@@ -117,8 +221,15 @@ def category_delete(request, category_id):
 def export_csv(request):
     game_resource = GameResource()
     dataset = game_resource.export()
+    # csv_files = ['game.csv', 'category.csv']
+
+    # zipObj = zipfile.ZipFile('game_launcher.zip', 'w', zipfile.ZIP_DEFLATED)
+    # for csv_file in csv_files:
+    #     zipObj.write(csv_file)
+    # zipObj.close()
 
     response = HttpResponse(dataset.csv, content_type='text/csv')
+    # response = HttpResponse(open('game_launcher.zip', 'rb'), content_type="application/zip")
     response['Content-Disposition'] = 'attachment; filename="games.csv"'
 
     return response
@@ -132,11 +243,12 @@ def import_csv(request):
         dataset = Dataset()
         games = request.FILES['file']
 
-        imported_data = dataset.load(games.read(), format='csv', headers=False)
+        imported_data = dataset.load(games.read().decode(), format='csv', headers=False)
         result = game_resource.import_data(dataset, dry_run=True)
 
         if not result.has_errors():
             game_resource.import_data(dataset, dry_run=False)
+            return HttpResponseRedirect('/app/')
 
     return render(request, 'import.html')
 
@@ -167,8 +279,33 @@ def logout_user(request):
     return HttpResponseRedirect('/app/login')
 
 
+
+@login_required(login_url='/app/login')
+def mark_game_as_favorite(request, game_id, user_id):
+    # if request.method == 'POST':
+    game = Game.objects.get(pk=game_id)
+    user = User.objects.get(pk=user_id)
+    favorite_instance = Favorite.objects.get_or_create(user=user, game=game)
+    
+    #favorite_instance.save()
+
+    return HttpResponseRedirect('/app')
+
+
+@login_required(login_url='/app/login')
+def unmark_game_as_favorite(request, game_id, user_id):
+    # if request.method == 'POST':
+    game = Game.objects.get(pk=game_id)
+    user = User.objects.get(pk=user_id)
+    favorite_instance = Favorite.objects.get(user=user, game=game)
+    favorite_instance.delete()
+    
+    #favorite_instance.save()
+
+    return HttpResponseRedirect('/app')
+
 # @csrf_exempt is needed for the registration form to work
-# correctcly. I do not know as to why, because other forms
+# correctly. I do not know as to why, because other forms
 # do not require it.
 @csrf_exempt
 def register_page(request):
@@ -245,6 +382,10 @@ def igdb__api_search_game(request, searchTerm):
     print("Could not authenticate at twitch.tv")
     return 1
 
+# Define your print method here
+def print_game(request):
+    return HttpResponseRedirect('/app/game/print')
+
 
 # For the popups to work, we need to create classes that extend
 # the original view (BSModelCreate|Update|DeleteView).
@@ -273,9 +414,23 @@ class CategoryCreateView(BSModalCreateView):
     success_url = reverse_lazy('index')
 
 
+class GameDeleteView(BSModalDeleteView):
+    model = Game
+    template_name = 'delete_game.html'
+    success_message = 'Success: Game was deleted.'
+    success_url = reverse_lazy('index')
+
+
 class CategoryUpdateView(BSModalUpdateView):
     model = Category
-    form_class = CategoryForm
     template_name = 'category_edit.html'
+    form_class = CategoryForm
     success_message = 'Success: Category was updated.'
+    success_url = reverse_lazy('index')
+
+
+class CategoryDeleteView(BSModalDeleteView):
+    model = Category
+    template_name = 'delete_category.html'
+    success_message = 'Success: Category was deleted.'
     success_url = reverse_lazy('index')
