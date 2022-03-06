@@ -15,7 +15,6 @@ If there are any changes made to the database, the follwing must be run
 to update it:
 
 ```bash
-$ python3 manage.py makemigrations myapp
-$ python3 manage.py sqlmigrate myapp [number (0001)]
+$ python3 manage.py makemigrations
 $ python3 manage.py migrate
 ```
