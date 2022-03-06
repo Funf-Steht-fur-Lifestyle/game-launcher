@@ -35,7 +35,7 @@
   </div>
   <div class="grid">
     {% for saved_game in saved_games %}
-      {% if saved_game.user.username == request.user.username %}
+      {% if saved_game.game.deleted == False and saved_game.user.username == request.user.username %}
         <div class="grid-item">
           <a href="{% url 'saved_game_details_page' saved_game.game.id %}">
           <div class="game-img brightness"><img src="{{ saved_game.game.thumbnail.url }}"></div>

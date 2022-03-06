@@ -30,13 +30,13 @@
           <a href="game/{{ game.id }}">
           <div class="game-img brightness"><img src="{{ game.thumbnail.url }}"></div>
           <div class="game-title">{{ game.name }}</div>
-          <div class="game-price">33,45 €</div>
+          <div class="game-price">{{ game.get_price }}</div>
           </a>
   	<a href="{% url 'save_game_to_library' game_id=game.id user_id=request.user.id %}">Save</a>
         </div>
       {% endfor %}
   
-      {% if request.user.developer == True %}
+      {% if request.user.is_developer == True or request.user.is_publisher == True %}
         <div class="grid-item grid-add-item">
           <button id="add-game-btn" class="button" type="button" name="button"><span class="fa fa-plus"></span></button>
         </div>

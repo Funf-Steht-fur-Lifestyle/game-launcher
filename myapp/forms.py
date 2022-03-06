@@ -20,7 +20,8 @@ User = get_user_model()
 class GameForm(BSModalModelForm):
     class Meta:
         model = Game
-        fields = {'name', 'thumbnail', 'desc', 'category', 'publication_date'}
+        # fields = {'name', 'thumbnail', 'desc', 'category', 'publication_date', 'developer', 'publisher', 'subcategories', 'price'}
+        exclude = {'deleted'}
 
 class CategoryForm(BSModalModelForm):
     class Meta:

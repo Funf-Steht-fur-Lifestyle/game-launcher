@@ -12,13 +12,13 @@
   {% for category in categories %}
     <div class="category">
       <span class="category-title"><a href="{% url 'category_page' category.id %}">{{ category.title }}</a></span>
-      {% if request.user.developer == True %}
+      {% if request.user.is_developer == True %}
         <button class="category-btn edit-category-btn button" type="button" data-form-url="{% url 'update_category' category.pk %}"><span class="fa fa-pencil"></span></button>
         <button class="category-btn button" type="button"><a href="{% url 'delete_category' category.pk %}"><span class="fa fa-trash"></span></a></button>
       {% endif %}
     </div>
   {% endfor %}
-  {% if request.user.developer == True %}
+  {% if request.user.is_developer == True or request.user.is_publisher == True %}
     <button id="add-category-btn" class="button" type="button" name="button"><span class="fa fa-plus"></span></button>
   {% endif %}
 </div>

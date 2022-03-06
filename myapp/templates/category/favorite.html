@@ -11,7 +11,7 @@
 <div class="content">
   <div class="grid">
     {% for favorite in favorites %}
-      {% if favorite.game.deleted == False %}
+      {% if favorite.game.deleted == False and favorite.user.username == request.user.username %}
         <div class="grid-item">
           <a href="game/{{ game.id }}">
             <span><div class="game-img"><img src="{{ favorite.game.thumbnail.url }}"></div></span>

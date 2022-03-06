@@ -97,7 +97,7 @@ def game_undelete(request, game_id):
 @login_required(login_url='/app/login')
 def save_game_to_library(request, game_id, user_id):
     game = Game.objects.get(pk=game_id)
-    user = user.objects.get(pk=user_id)
+    user = User.objects.get(pk=user_id)
     saved_game_instance = SavedGame.objects.get_or_create(user=user, game=game)
 
     return HttpResponseRedirect('/app')
@@ -271,7 +271,7 @@ def logout_user(request):
 @login_required(login_url='/app/login')
 def mark_game_as_favorite(request, game_id, user_id):
     game = Game.objects.get(pk=game_id)
-    user = user.objects.get(pk=user_id)
+    user = User.objects.get(pk=user_id)
     favorite_instance = Favorite.objects.get_or_create(user=user, game=game)
 
     return HttpResponseRedirect('/app/game/saved')
@@ -355,17 +355,17 @@ class GameUpdateView(BSModalUpdateView):
     success_url = reverse_lazy('index')
 
 
-class CategoryCreateView(BSModalCreateView):
-    form_class = CategoryForm
-    template_name = 'category/add.html'
-    success_message = 'Success: Category was created.'
-    success_url = reverse_lazy('index')
-
-
 class GameDeleteView(BSModalDeleteView):
     model = Game
     template_name = 'delete/game.html'
     success_message = 'Success: Game was deleted.'
+    success_url = reverse_lazy('index')
+
+
+class CategoryCreateView(BSModalCreateView):
+    form_class = CategoryForm
+    template_name = 'category/add.html'
+    success_message = 'Success: Category was created.'
     success_url = reverse_lazy('index')
 
 

@@ -11,9 +11,10 @@
     <div class="game-details">
       <div class="game-title">
         {{ game.name }}
-  
-        <button class="update-game-btn button" type="button" name="button" data-form-url="{% url 'update_game' game.pk %}"><span class="fa fa-pencil"></span></button>
-        <a href="{% url 'delete_game' game.pk %}"><span class="fa fa-trash"></span></a>
+        {% if game.developer == request.user  or game.publisher == request.user %}
+          <button class="update-game-btn button" type="button" name="button" data-form-url="{% url 'update_game' game.pk %}"><span class="fa fa-pencil"></span></button>
+          <a href="{% url 'delete_game' game.pk %}"><span class="fa fa-trash"></span></a>
+        {% endif %}
         <a href="{% url 'print_game' %}" class="button"><span class="fa fa-print"></span></a>
         {% for favorite in favorites %}
               {% if favorite.game.name == game.name %}
@@ -30,23 +31,23 @@
       
       <div class="game-thumb"><img src="{{ game.thumbnail.url }}" /></div>
       <div class="game-dt">
-        <div class="label">Creator</div>
-        <div>Epic Games</div>
-        <div class="label">Publisher</div>
-        <div>Epic Games</div>
-        <div class="label">Publication date</div>
+        <div class="label">Entwickler</div>
+        <div>{{ game.developer }}</div>
+        <div class="label">Herausgeber</div>
+        <div>{{ game.publisher }}</div>
+        <div class="label">Veröffentlichungsdatum</div>
         <div>{{ game.publication_date }}</div>
-        <div class="label">Category</div>
+        <div class="label">Kaufpreis</div>
+        <div>{{ game.get_price }}</div>
+        <div class="label">Kategorie</div>
         <div>{{ game.category }}</div>
-        <div class="label">Genres</div>
-        <div class="genre">Action</div>
-        <div class="genre">RPG</div>
-        <div class="genre">MMO</div>
+        <div class="label">Sub-Kategorien</div>
+        {% for subcategorie in game.subcategories.all %}
+          <div class="genre">{{ subcategorie }}</div>
+        {% endfor %}
       </div>
     </div>
-  
-    
-  
+
     <div class="game-description">
       <p>{{ game.desc }}</p>
     </div>

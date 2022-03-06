@@ -16,15 +16,9 @@ class Category(models.Model):
         return '%s' % (self.title)
 
 
-class Publisher(models.Model):
-    publisher = models.CharField(max_length=200)
-
-    def __str__(self):
-        return '%s' % (self.name)
-
-
 class User(AbstractUser):
-    developer = models.BooleanField('Entwickler', default=False)
+    is_developer = models.BooleanField('Entwickler', default=False)
+    is_publisher = models.BooleanField('Herausgeber', default=False)
 
     def __str__(self):
         return '%s' % (self.username)
@@ -34,8 +28,11 @@ class Game(models.Model):
     name = models.CharField('Name', max_length=200)
     thumbnail = models.ImageField('Thumbnail', upload_to='img/', default='default-image.jpg', blank=True)
     desc = models.TextField('Beschreibung')
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Kategorie')
-    # publisher = models.ForeignKey(Publisher, on_delete=models.CASCADE, default=0)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='category', verbose_name='Kategorie')
+    subcategories = models.ManyToManyField(Category, related_name='subcategories', verbose_name='Sub-Kategorien')
+    price = models.FloatField('Preis', blank=True, default=0.0)
+    developer = models.ForeignKey(User, limit_choices_to=({'is_developer': True}), on_delete=models.DO_NOTHING, verbose_name='Entwickler')
+    publisher = models.ForeignKey(User, related_name='publisher', limit_choices_to=({'is_publisher': True}), on_delete=models.DO_NOTHING, verbose_name="Herausgeber")
     publication_date = models.DateTimeField(default=datetime.now, blank=True)
     deleted = models.BooleanField('Gelöscht', default=False)
 
@@ -50,6 +47,13 @@ class Game(models.Model):
                 return True
 
         return False
+
+    
+    def get_price(self):
+        if self.price == 0.0:
+            return "kostenlos"
+
+        return "{} €".format(self.price)
 
 
 class SavedGame(models.Model):
