@@ -1,8 +1,11 @@
 from django.shortcuts import render
 
+import os
 import requests
 import csv
 import ctypes
+import zipfile
+import shutil
 
 from django.urls import reverse_lazy, resolve
 from django.http import HttpResponse, HttpResponseRedirect
@@ -17,8 +20,10 @@ from bootstrap_modal_forms.generic import BSModalCreateView, BSModalUpdateView, 
 from tablib import Dataset
 
 from .models import User, Game, Category, Favorite, SavedGame
-from .resources import GameResource, CategoryResource
+from .resources import UserResource, GameResource, CategoryResource, FavoriteResource, SavedGameResource
 from .forms import GameForm, CategoryForm, CreateUserForm
+from .exporter import Exporter
+from .importer import Importer
 
 # This file contains the logic for the URLs i. e. it tells what
 # should be represented by the browser. For example loading an
@@ -176,7 +181,6 @@ def category_favorites_page(request):
     return render(request, 'category/favorite.html', args)
 
 
-
 @login_required(login_url='/app/login')
 def category_deleted(request):
     categories = Category.objects.all()
@@ -204,39 +208,53 @@ def category_delete(request, category_id):
     return render(request, 'core/index.html', args)
 
 
-# Export does work for the User table, but not for the others.
 @login_required(login_url='/app/login')
 def export_csv(request):
-    game_resource = GameResource()
-    dataset = game_resource.export()
-    # csv_files = ['game.csv', 'category.csv']
+    path = '{}/game_launcher_csv/'.format(os.getcwd())
+    exporter = Exporter()
 
-    # zipObj = zipfile.ZipFile('game_launcher.zip', 'w', zipfile.ZIP_DEFLATED)
-    # for csv_file in csv_files:
-    #     zipObj.write(csv_file)
-    # zipObj.close()
+    exporter.export_csv('game.csv', GameResource())
+    exporter.export_csv('category.csv', CategoryResource())
+    exporter.export_csv('user.csv', UserResource())
+    exporter.export_csv('saved_game.csv', SavedGameResource())
+    exporter.export_csv('favorite.csv', FavoriteResource())
 
-    response = HttpResponse(dataset.csv, content_type='text/csv')
-    # response = HttpResponse(open('game_launcher.zip', 'rb'), content_type="application/zip")
-    response['Content-Disposition'] = 'attachment; filename="games.csv"'
+    csv_files = [os.path.join(path, 'user.csv'), os.path.join(path, 'saved_game.csv'), os.path.join(path, 'favorite.csv'), os.path.join(path, 'game.csv'), os.path.join(path, 'category.csv')]
+
+    zip_obj = zipfile.ZipFile('game_launcher.zip', 'w')
+    for csv_file in csv_files:
+        zip_obj.write(csv_file, os.path.basename(csv_file))
+    zip_obj.close()
+
+    exporter.delete_csv_dir()
+
+    response = HttpResponse(open('game_launcher.zip', 'rb'), content_type="application/zip")
+    response['Content-Disposition'] = 'attachment; filename="game_launcher.zip"'
+
+    os.remove('{}/game_launcher.zip'.format(os.getcwd()))
 
     return response
 
 
-# Import is still work in progress (WIP).
 @login_required(login_url='/app/login')
 def import_csv(request):
+    print('first')
     if request.method == 'POST':
-        game_resource = GameResource()
-        dataset = Dataset()
-        games = request.FILES['file']
+      print('importing')
+      file = request.FILES['file']
+      print('file')
+      zip_obj = zipfile.ZipFile(file, 'r')
+      csv_files = zip_obj.namelist()
+      importer = Importer()
 
-        imported_data = dataset.load(games.read().decode(), format='csv', headers=False)
-        result = game_resource.import_data(dataset, dry_run=True)
+      importer.import_csv_file(zip_obj.read('user.csv').decode(), UserResource())
+      importer.import_csv_file(zip_obj.read('category.csv').decode(), CategoryResource())
+      importer.import_csv_file(zip_obj.read('game.csv').decode(), GameResource())
+      importer.import_csv_file(zip_obj.read('saved_game.csv').decode(), SavedGameResource())
+      importer.import_csv_file(zip_obj.read('favorite.csv').decode(), FavoriteResource())
+      print('importing')
 
-        if not result.has_errors():
-            game_resource.import_data(dataset, dry_run=False)
-            return HttpResponseRedirect('/app/')
+      return HttpResponseRedirect('/app')
 
     return render(request, 'import.html')
 
@@ -267,7 +285,6 @@ def logout_user(request):
     return HttpResponseRedirect('/app/login')
 
 
-
 @login_required(login_url='/app/login')
 def mark_game_as_favorite(request, game_id, user_id):
     game = Game.objects.get(pk=game_id)
@@ -279,14 +296,11 @@ def mark_game_as_favorite(request, game_id, user_id):
 
 @login_required(login_url='/app/login')
 def unmark_game_as_favorite(request, game_id, user_id):
-    # if request.method == 'POST':
     game = Game.objects.get(pk=game_id)
     user = User.objects.get(pk=user_id)
     favorite_instance = Favorite.objects.get(user=user, game=game)
     favorite_instance.delete()
     
-    #favorite_instance.save()
-
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 # @csrf_exempt is needed for the registration form to work

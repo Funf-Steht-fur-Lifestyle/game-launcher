@@ -31,8 +31,8 @@ class Game(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='category', verbose_name='Kategorie')
     subcategories = models.ManyToManyField(Category, related_name='subcategories', verbose_name='Sub-Kategorien')
     price = models.FloatField('Preis', blank=True, default=0.0)
-    developer = models.ForeignKey(User, limit_choices_to=({'is_developer': True}), on_delete=models.DO_NOTHING, verbose_name='Entwickler')
-    publisher = models.ForeignKey(User, related_name='publisher', limit_choices_to=({'is_publisher': True}), on_delete=models.DO_NOTHING, verbose_name="Herausgeber")
+    developer = models.ForeignKey(User, limit_choices_to=({'is_developer': True}), on_delete=models.CASCADE, verbose_name='Entwickler')
+    publisher = models.ForeignKey(User, related_name='publisher', limit_choices_to=({'is_publisher': True}), on_delete=models.CASCADE, verbose_name="Herausgeber")
     publication_date = models.DateTimeField(default=datetime.now, blank=True)
     deleted = models.BooleanField('Gelöscht', default=False)
 
@@ -57,16 +57,16 @@ class Game(models.Model):
 
 
 class SavedGame(models.Model):
-    game = models.ForeignKey(Game, on_delete=models.DO_NOTHING)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     
     def __str__(self):
         return '%s' % (self.game)
 
 
 class Favorite(models.Model):
-    game = models.ForeignKey(Game, on_delete=models.DO_NOTHING)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def __str__(self):
         return '%s' % (self.game)

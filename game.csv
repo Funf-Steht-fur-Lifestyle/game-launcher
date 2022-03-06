@@ -1,0 +1,3 @@
+id,name,thumbnail,desc,category,subcategories,price,developer,publisher,publication_date,deleted
+1,test,default-image.jpg,This is atest,1,"2,3",0.0,1,2,2022-03-06 09:52:09,0
+2,test 2,default-image.jpg,This is test 2,2,"1,3",13.23,1,1,2022-03-06 09:55:59,0

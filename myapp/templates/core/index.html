@@ -5,24 +5,32 @@
 {% block content %}
   {% block extrastylesheets %}
     <link rel="stylesheet" href="{% static 'assets/css/game_displayer.css' %}" />
-    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/selection_menu.css' %}" />
   {% endblock extrastylesheets %}
 
   <div class="content">
     <div class="sorting">
-      <span><p>Sortiere nach: </p></span>
-      <div class="select">
-        <select id="standard-select">
-          <option id="name" value="1">Alphabetisch</option>
-          <option id="price" value="2">Pries: Aufsteigend</option>
-          <option id="-price" value="3">Pries: Absteigend</option>
-          <option id="" value="4">Bewertung: Aufsteigend</option>
-          <option id="" value="5">Bewertung: Absteigend</option>
-        </select>
-    </div>
-    <div class="import-export">
-      <span><a href="{% url 'import_csv' %}">Import</a></span>
-      <span><a href="{% url 'export_csv' %}">Export</a></span>
+      <div class="s">
+        <span><p>Sortiere nach: </p></span>
+        <div class="select">
+          <select id="standard-select">
+            <option id="name" value="1">Alphabetisch</option>
+            <option id="price" value="2">Pries: Aufsteigend</option>
+            <option id="-price" value="3">Pries: Absteigend</option>
+            <option id="" value="4">Bewertung: Aufsteigend</option>
+            <option id="" value="5">Bewertung: Absteigend</option>
+          </select>
+        </div>
+      </div>
+      <div class="import-export">
+        <!--<form id="import-form" method="post" enctype="multipart/form-data" data-form-url="{% url 'import_csv' %}">
+          {% csrf_token %}
+          <input type="file" name="file">
+          <button type="submit">Import</button>
+          </form>-->
+        <span><a href="{% url 'import_csv' %}">Import</a></span>
+        <span><a href="{% url 'export_csv' %}">Export</a></span>
+      </div>
     </div>
     <div class="grid">
       {% for game in games %}
@@ -57,6 +65,35 @@
             window.location.href = $(this).data("form-url");
           });
         });
+        // $("#import-form").submit(function () {
+        //     alert('clicked');
+        //     $form = $(this)
+        //     var formData = new FormatData(this);
+        //     $.ajax({
+        //       url: "{% url 'import_csv' %}",
+        //       type: 'POST',
+        //       data: formData,
+        //       success: function(response) {
+        //         if (response.error) {
+        //           alert('error')
+        //           alert(response.error)
+        //           $.each(response.errors, function(name, error){
+        //             error = '<small class="text-muted error">' + error + '</small>'
+        //             $form.find('[name=' + name + ']').after(error);
+        //           })
+        //         } else {
+        //           alert(response.message)
+        //           window.location.href = "http://localhost:8000/app/import"
+        //         }
+        //       }
+        //       cache: false,
+        //       contentType: false,
+        //       processData: false
+        //     });
+        //     // alert('clicked');
+        //     // alert($(this).data("form-url"));
+        //     // window.location.href = $(this).data("form-url");
+        // });
   
         $("#standard-select").on('change', function () {
           var value = $(this).children(":selected").attr("id");
