@@ -32,25 +32,8 @@
   	<a href="game/{{ game.id }}">
     	<div class="game-img brightness"><img src="{{ game.thumbnail.url }}"></div>
     	<div class="game-title">{{ game.name }}</div>
-    	<div class="game-price">33,45 €</div>
+        <div class="game-price">{{ game.get_price }}</div>
   	</a>
-  	{% if favorites.count %}
-  	  {% for favorite in favorites %}
-              {% if favorite.game.name == game.name %}
-  	      <div href="#" class="favorite-button marked" title="Mark as favorite">
-  	        <button class="mark-game-as-favorite-btn inline button" type="button" name="button" data-form-url="{% url 'unmark_game_as_favorite' game_id=game.pk user_id=request.user.pk %}"><span class="fa fa-heart fa-1x"></span></a>
-                </div>
-  	    {% else %}
-  	      <div href="#" class="favorite-button" title="Like Button">
-  	        <button class="mark-game-as-favorite-btn inline button" type="button" name="button" data-form-url="{% url 'mark_game_as_favorite' game_id=game.pk user_id=request.user.pk %}"><span class="fa fa-heart fa-1x"></span></a>
-                </div>
-  	    {% endif %}
-            {% endfor %}
-  	{% else %}
-  	  <div href="#" class="favorite-button" title="Like Button">
-  	      <button class="mark-game-as-favorite-btn inline button" type="button" name="button" data-form-url="{% url 'mark_game_as_favorite' game_id=game.pk user_id=request.user.pk %}"><span class="fa fa-heart fa-1x"></span></a>
-            </div>
-  	{% endif %}
       </div>
     {% endfor %}
     

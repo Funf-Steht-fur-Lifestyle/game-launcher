@@ -11,33 +11,61 @@
 
   <div class="modal-body">
     <div class="form-group{% if form.name.errors %} invalid{% endif %}">
-        <label for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
-        {{ form.name }}
-        {% for error in form.name.errors %}
-          <p class="help-block">{{ error }}</p>
-        {% endfor %}
-    </div>
-    <div class="form-group{% if form.thumbnail.errors %} invalid{% endif %}">
-        <label for="{{ form.thumbnail.id_for_label }}">{{ form.thumbnail.label }}</label>
-        {{ form.thumbnail }}
-        {% for error in category.thumbnail.errors %}
-          <p class="help-block">{{ error }}</p>
-        {% endfor %}
-    </div>
-    <div class="form-group{% if form.category.errors %} invalid{% endif %}">
-        <label for="{{ form.category.id_for_label }}">{{ form.category.label }}</label>
-        {{ form.category }}
-        {% for error in category.name.errors %}
-          <p class="help-block">{{ error }}</p>
-        {% endfor %}
-    </div>
-    <div class="form-group{% if form.desc.errors %} invalid{% endif %}">
-        <label for="{{ form.desc.id_for_label }}">{{ form.desc.label }}</label>
-        {{ form.desc }}
-        {% for error in category.desc.errors %}
-          <p class="help-block">{{ error }}</p>
-        {% endfor %}
-    </div>
+          <label for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
+          {{ form.name }}
+          {% for error in form.name.errors %}
+            <p class="help-block">{{ error }}</p>
+          {% endfor %}
+      </div>
+      <div class="form-group{% if form.price.errors %} invalid{% endif %}">
+          <label for="{{ form.price.id_for_label }}">{{ form.price.label }}</label>
+          {{ form.price }}
+          {% for error in form.price.errors %}
+            <p class="help-block">{{ error }}</p>
+          {% endfor %}
+      </div>
+      <div class="form-group{% if form.thumbnail.errors %} invalid{% endif %}">
+          <label for="{{ form.thumbnail.id_for_label }}">{{ form.thumbnail.label }}</label>
+          {{ form.thumbnail }}
+          {% for error in form.thumbnail.errors %}
+            <p class="help-block">{{ error }}</p>
+          {% endfor %}
+      </div>
+      <div class="form-group{% if form.developer.errors %} invalid{% endif %}">
+          <label for="{{ form.developer.id_for_label }}">{{ form.developer.label }}</label>
+          {{ form.developer }}
+          {% for error in form.developer.errors %}
+            <p class="help-block">{{ error }}</p>
+          {% endfor %}
+      </div>
+      <div class="form-group{% if form.publisher.errors %} invalid{% endif %}">
+          <label for="{{ form.publisher.id_for_label }}">{{ form.publisher.label }}</label>
+          {{ form.publisher }}
+          {% for error in form.publisher.errors %}
+            <p class="help-block">{{ error }}</p>
+          {% endfor %}
+      </div>
+      <div class="form-group{% if form.category.errors %} invalid{% endif %}">
+          <label for="{{ form.category.id_for_label }}">{{ form.category.label }}</label>
+          {{ form.category }}
+          {% for error in form.category.errors %}
+            <p class="help-block">{{ error }}</p>
+          {% endfor %}
+      </div>
+      <div class="form-group{% if form.subcategories.errors %} invalid{% endif %}">
+          <label for="{{ form.subcategories.id_for_label }}">{{ form.subcategories.label }}</label>
+          {{ form.subcategories }}
+          {% for error in form.subcategories.errors %}
+            <p class="help-block">{{ error }}</p>
+          {% endfor %}
+      </div>
+      <div class="form-group{% if form.desc.errors %} invalid{% endif %}">
+          <label for="{{ form.desc.id_for_label }}">{{ form.desc.label }}</label>
+          {{ form.desc }}
+          {% for error in form.desc.errors %}
+            <p class="help-block">{{ error }}</p>
+          {% endfor %}
+      </div>
   </div>
 
   <div class="modal-footer">

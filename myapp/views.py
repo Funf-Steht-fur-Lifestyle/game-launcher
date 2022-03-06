@@ -133,8 +133,7 @@ def saved_game_details_page(request, saved_game_id):
     args['categories'] = categories
     args['favorites'] = favorites
 
-    return render(request, 'game/page.html', args)
-
+    return render(request, 'game/saved.html', args)
 
 
 @login_required(login_url='/app/login')
