@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="{% static 'assets/css/game.css' %}" />
     <link rel="stylesheet" href="{% static 'assets/css/game_displayer.css' %}" />
   {% endblock extrastylesheets %}
-  
+
   <div class="grid-container">
     <div class="game-details">
       <div class="game-title">
@@ -18,7 +18,7 @@
         {% endif %}
         <a href="{% url 'print_game' %}" class="button"><span class="fa fa-print"></span></a>
       </div>
-      
+
       <div class="game-thumb"><img src="{{ game.thumbnail.url }}" /></div>
       <div class="game-dt">
         <div class="label">Entwickler</div>
@@ -48,13 +48,13 @@
       $(function () {
         $(".update-game-btn").each(function () {
           $(this).modalForm({
-    	  formURL: $(this).data("form-url")
+            formURL: $(this).data("form-url")
           });
         });
         $("#add-category-btn").modalForm({formURL: "{% url 'category_add' %}"});
         $(".edit-category-btn").each(function () {
           $(this).modalForm({
-    	  formURL: $(this).data("form-url")
+            formURL: $(this).data("form-url")
           });
         });
         $(".mark-game-as-favorite-btn").each(function () {

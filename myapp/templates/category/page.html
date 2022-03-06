@@ -29,18 +29,18 @@
     <div class="grid">
     {% for game in games %}
       <div class="grid-item">
-  	<a href="game/{{ game.id }}">
-    	<div class="game-img brightness"><img src="{{ game.thumbnail.url }}"></div>
-    	<div class="game-title">{{ game.name }}</div>
-        <div class="game-price">{{ game.get_price }}</div>
-  	</a>
+        <a href="game/{{ game.id }}">
+          <div class="game-img brightness"><img src="{{ game.thumbnail.url }}"></div>
+          <div class="game-title">{{ game.name }}</div>
+          <div class="game-price">{{ game.get_price }}</div>
+        </a>
       </div>
     {% endfor %}
-    
-     <div class="grid-item grid-add-item">
-  	    <button id="add-game-btn" class="button" type="button" name="button"><span class="fa fa-plus"></span></button>
-      </div>
-    
+
+    <div class="grid-item grid-add-item">
+      <button id="add-game-btn" class="button" type="button" name="button"><span class="fa fa-plus"></span></button>
+    </div>
+
     </div>
   </div>
 {% endblock content %}

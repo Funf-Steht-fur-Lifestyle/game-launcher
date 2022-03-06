@@ -10,91 +10,91 @@
 
 {% block content %}
 
-{% block extrastylesheets %}
-  <link rel="stylesheet" href="{% static 'assets/css/game_displayer.css' %}" />
-  <link rel="stylesheet" href="{% static 'assets/css/selection_menu.css' %}" />
-{% endblock extrastylesheets %}
-
-<div class="content">
-  <div class="sorting">
-    <div class="s">
-      <span><p>Sortiere nach: </p></span>
-      <div class="select">
-        <select id="standard-select">
-          <option id="name" value="1">Alphabetisch</option>
-          <option id="price" value="2">Pries: Aufsteigend</option>
-          <option id="-price" value="3">Pries: Absteigend</option>
-          <option id="" value="4">Bewertung: Aufsteigend</option>
-          <option id="" value="5">Bewertung: Absteigend</option>
-        </select>
+  {% block extrastylesheets %}
+    <link rel="stylesheet" href="{% static 'assets/css/game_displayer.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/selection_menu.css' %}" />
+  {% endblock extrastylesheets %}
+  
+  <div class="content">
+    <div class="sorting">
+      <div class="s">
+        <span><p>Sortiere nach: </p></span>
+        <div class="select">
+          <select id="standard-select">
+            <option id="name" value="1">Alphabetisch</option>
+            <option id="price" value="2">Pries: Aufsteigend</option>
+            <option id="-price" value="3">Pries: Absteigend</option>
+            <option id="" value="4">Bewertung: Aufsteigend</option>
+            <option id="" value="5">Bewertung: Absteigend</option>
+          </select>
+        </div>
+      </div>
+      <div class="import-export">
+        <span><a href="{% url 'import_csv' %}">Import</a></span>
+        <span><a href="{% url 'export_csv' %}">Export</a></span>
       </div>
     </div>
-    <div class="import-export">
-      <span><a href="{% url 'import_csv' %}">Import</a></span>
-      <span><a href="{% url 'export_csv' %}">Export</a></span>
+    <div class="grid">
+      {% for saved_game in saved_games %}
+        {% if saved_game.game.deleted == False and saved_game.user.username == request.user.username %}
+          <div class="grid-item">
+            <a href="{% url 'saved_game_details_page' saved_game.game.id %}">
+            <div class="game-img brightness"><img src="{{ saved_game.game.thumbnail.url }}"></div>
+            <div class="game-title">{{ saved_game.game.name }}</div>
+            <div class="game-price">{{ saved_game.game.get_price }}</div>
+            </a>
+            <a href="{% url 'delete_game_from_library' saved_game_id=saved_game.id %}">Delete</a>
+            {% if saved_game.game.is_favorite %}
+              <div href="#" class="favorite-button marked" title="Unmark from favorite">
+                <button class="mark-game-as-favorite-btn inline button" type="button" name="button" data-form-url="{% url 'unmark_game_as_favorite' game_id=saved_game.game.pk user_id=request.user.pk %}"><span class="fa fa-heart fa-1x"></span></a>
+              </div>
+            {% else %}
+              <div href="#" class="favorite-button" title="Mark as favorite">
+                <button class="mark-game-as-favorite-btn inline button" type="button" name="button" data-form-url="{% url 'mark_game_as_favorite' game_id=saved_game.game.pk user_id=request.user.pk %}"><span class="fa fa-heart fa-1x"></span></a>
+              </div>
+            {% endif %}
+          </div>
+        {% endif %}
+      {% endfor %}
     </div>
   </div>
-  <div class="grid">
-    {% for saved_game in saved_games %}
-      {% if saved_game.game.deleted == False and saved_game.user.username == request.user.username %}
-        <div class="grid-item">
-          <a href="{% url 'saved_game_details_page' saved_game.game.id %}">
-          <div class="game-img brightness"><img src="{{ saved_game.game.thumbnail.url }}"></div>
-          <div class="game-title">{{ saved_game.game.name }}</div>
-          <div class="game-price">{{ saved_game.game.get_price }}</div>
-          </a>
-	  <a href="{% url 'delete_game_from_library' saved_game_id=saved_game.id %}">Delete</a>
-              {% if saved_game.game.is_favorite %}
-                <div href="#" class="favorite-button marked" title="Unmark from favorite">
-                  <button class="mark-game-as-favorite-btn inline button" type="button" name="button" data-form-url="{% url 'unmark_game_as_favorite' game_id=saved_game.game.pk user_id=request.user.pk %}"><span class="fa fa-heart fa-1x"></span></a>
-                </div>
-              {% else %}
-                <div href="#" class="favorite-button" title="Mark as favorite">
-                  <button class="mark-game-as-favorite-btn inline button" type="button" name="button" data-form-url="{% url 'mark_game_as_favorite' game_id=saved_game.game.pk user_id=request.user.pk %}"><span class="fa fa-heart fa-1x"></span></a>
-                </div>
-              {% endif %}
-        </div>
-      {% endif %}
-    {% endfor %}
-  </div>
-</div>
-
-{% block extrascripts %}
-  <script type="text/javascript">
-    $(function () {
-      $("#add-category-btn").modalForm({formURL: "{% url 'category_add' %}"});
-      $(".edit-category-btn").each(function () {
-        $(this).modalForm({
-          formURL: $(this).data("form-url")
+  
+  {% block extrascripts %}
+    <script type="text/javascript">
+      $(function () {
+        $("#add-category-btn").modalForm({formURL: "{% url 'category_add' %}"});
+        $(".edit-category-btn").each(function () {
+          $(this).modalForm({
+            formURL: $(this).data("form-url")
+          });
         });
-      });
-      $(".mark-game-as-favorite-btn").each(function () {
-        $(this).click(function () {
-          window.location.href = $(this).data("form-url");
+        $(".mark-game-as-favorite-btn").each(function () {
+          $(this).click(function () {
+            window.location.href = $(this).data("form-url");
+          });
+        });
+
+        $("#standard-select").on('change', function () {
+          var value = $(this).children(":selected").attr("id");
+          var id = $(this).val();
+          window.location.href = `/app/sortBy=${value}&sortId=${id}`;
         });
       });
 
-      $("#standard-select").on('change', function () {
-        var value = $(this).children(":selected").attr("id");
-        var id = $(this).val();
-        window.location.href = `/app/sortBy=${value}&sortId=${id}`;
-      });
-    });
+      $("#standard-select").val({{ sort_id }});
 
-    $("#standard-select").val({{ sort_id }});
-
-    function dropDown(event) {
-      event.target.parentElement.children[1].classList.remove("d-none");
-      document.getElementById("overlay").classList.remove("d-none");
-    }
-
-    function hide(event) {
-      var items = document.getElementsByClassName('menu');
-      for (let i = 0; i < items.length; i++) {
-          items[i].classList.add("d-none");
+      function dropDown(event) {
+        event.target.parentElement.children[1].classList.remove("d-none");
+        document.getElementById("overlay").classList.remove("d-none");
       }
-      document.getElementById("overlay").classList.add("d-none");
-    }
-  </script>
-{% endblock extrascripts %}
+
+      function hide(event) {
+        var items = document.getElementsByClassName('menu');
+        for (let i = 0; i < items.length; i++) {
+            items[i].classList.add("d-none");
+        }
+        document.getElementById("overlay").classList.add("d-none");
+      }
+    </script>
+  {% endblock extrascripts %}
 {% endblock content %}
