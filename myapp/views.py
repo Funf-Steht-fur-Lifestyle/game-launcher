@@ -4,7 +4,7 @@ import requests
 import csv
 import ctypes
 
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, resolve
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
@@ -274,20 +274,20 @@ def mark_game_as_favorite(request, game_id, user_id):
     user = User.objects.get(pk=user_id)
     favorite_instance = Favorite.objects.get_or_create(user=user, game=game)
 
-    return HttpResponseRedirect('/app/game/saved')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 @login_required(login_url='/app/login')
 def unmark_game_as_favorite(request, game_id, user_id):
     # if request.method == 'POST':
     game = Game.objects.get(pk=game_id)
-    user = user.objects.get(pk=user_id)
+    user = User.objects.get(pk=user_id)
     favorite_instance = Favorite.objects.get(user=user, game=game)
     favorite_instance.delete()
     
     #favorite_instance.save()
 
-    return HttpResponseRedirect('/app/category/favorites')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 # @csrf_exempt is needed for the registration form to work
 # correctly. I do not know as to why, because other forms
