@@ -237,11 +237,8 @@ def export_csv(request):
 
 @login_required(login_url='/app/login')
 def import_csv(request):
-    print('first')
     if request.method == 'POST':
-      print('importing')
       file = request.FILES['file']
-      print('file')
       zip_obj = zipfile.ZipFile(file, 'r')
       csv_files = zip_obj.namelist()
       importer = Importer()
@@ -251,11 +248,10 @@ def import_csv(request):
       importer.import_csv_file(zip_obj.read('game.csv').decode(), GameResource())
       importer.import_csv_file(zip_obj.read('saved_game.csv').decode(), SavedGameResource())
       importer.import_csv_file(zip_obj.read('favorite.csv').decode(), FavoriteResource())
-      print('importing')
 
       return HttpResponseRedirect('/app')
 
-    return render(request, 'import.html')
+    return HttpResponseRedirect('/app')
 
 
 def login_page(request):

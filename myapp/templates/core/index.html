@@ -23,12 +23,11 @@
         </div>
       </div>
       <div class="import-export">
-        <!--<form id="import-form" method="post" enctype="multipart/form-data" data-form-url="{% url 'import_csv' %}">
-          {% csrf_token %}
-          <input type="file" name="file">
+        <form id="import-form" action="" method="post" enctype="multipart/form-data">
+          <input id="file" type="file" name="file">
           <button type="submit">Import</button>
-          </form>-->
-        <span><a href="{% url 'import_csv' %}">Import</a></span>
+        </form>
+          <!-- <span><a href="{% url 'import_csv' %}">Import</a></span> -->
         <span><a href="{% url 'export_csv' %}">Export</a></span>
       </div>
     </div>
@@ -65,35 +64,23 @@
             window.location.href = $(this).data("form-url");
           });
         });
-        // $("#import-form").submit(function () {
-        //     alert('clicked');
-        //     $form = $(this)
-        //     var formData = new FormatData(this);
-        //     $.ajax({
-        //       url: "{% url 'import_csv' %}",
-        //       type: 'POST',
-        //       data: formData,
-        //       success: function(response) {
-        //         if (response.error) {
-        //           alert('error')
-        //           alert(response.error)
-        //           $.each(response.errors, function(name, error){
-        //             error = '<small class="text-muted error">' + error + '</small>'
-        //             $form.find('[name=' + name + ']').after(error);
-        //           })
-        //         } else {
-        //           alert(response.message)
-        //           window.location.href = "http://localhost:8000/app/import"
-        //         }
-        //       }
-        //       cache: false,
-        //       contentType: false,
-        //       processData: false
-        //     });
-        //     // alert('clicked');
-        //     // alert($(this).data("form-url"));
-        //     // window.location.href = $(this).data("form-url");
-        // });
+        $("#import-form").submit(function (e) {
+            e.preventDefault();
+            var formData = new FormData();
+            formData.append('file', $("input[id^='file'")[0].files[0])
+            formData.append('csrfmiddlewaretoken', "{{ csrf_token }}")
+            $.ajax({
+              url: "{% url 'import_csv' %}",
+              method: "POST",
+              processData: false,
+              contentType: false,
+              mimeType: 'multipart/form-data',
+              data: formData,
+              success: function(data) {
+                window.location.href = "/app"
+              }
+            });
+        });
 
         $("#standard-select").on('change', function () {
           var value = $(this).children(":selected").attr("id");
