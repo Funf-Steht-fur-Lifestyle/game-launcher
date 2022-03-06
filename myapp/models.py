@@ -57,16 +57,16 @@ class Game(models.Model):
 
 
 class SavedGame(models.Model):
-    game = models.ForeignKey(Game, on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    game = models.ForeignKey(Game, on_delete=models.DO_NOTHING)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
     
     def __str__(self):
         return '%s' % (self.game)
 
 
 class Favorite(models.Model):
-    game = models.ForeignKey(Game, on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    game = models.ForeignKey(Game, on_delete=models.DO_NOTHING)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
 
     def __str__(self):
         return '%s' % (self.game)
