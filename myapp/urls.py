@@ -24,7 +24,7 @@ urlpatterns = [
     path('game/saved/delete/<int:saved_game_id>', views.delete_game_from_library, name='delete_game_from_library'),
     path('game/unmark_favorite/<int:game_id>/<int:user_id>', views.unmark_game_as_favorite, name='unmark_game_as_favorite'),
     path('game/add', views.GameCreateView.as_view(), name="game_add"),
-    path('game/print', views.print_game, name="print_game"),
+    path('game/print/<int:game_id>', views.print_game, name="print_game"),
     path('sortBy=<str:value>&sortId=<int:sort_id>', views.sort_games_by, name="sort_games_by"),
     path('category/<int:category_id>', views.category_page, name="category_page"),
     path('category/add', views.CategoryCreateView.as_view(), name="category_add"),

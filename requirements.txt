@@ -4,3 +4,6 @@ django-import-export
 django-bootstrap-modal-forms
 pillow
 requests
+pdfkit
+PyPDF2
+wkhtmltopdf

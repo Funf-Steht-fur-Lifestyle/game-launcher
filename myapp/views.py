@@ -6,6 +6,9 @@ import csv
 import ctypes
 import zipfile
 import shutil
+import PyPDF2
+import pdfkit
+import webbrowser
 
 from django.urls import reverse_lazy, resolve
 from django.http import HttpResponse, HttpResponseRedirect
@@ -445,10 +448,34 @@ def api_call(request):
     return HttpResponse('Error')
 
 
-# Define your print method here
-def print_game(request):
-    return HttpResponseRedirect('/app/game/print')
+@login_required(login_url='/app/login')
+def print_game(request, game_id):
+    
+    #Create PDF in Folder
+    cookies = request.COOKIES
+    options = {
+    'page-size':'A4',
+    'encoding':'utf-8', 
+    'margin-top':'0cm',
+    'margin-bottom':'0cm',
+    'margin-left':'0cm',
+    'margin-right':'0cm',
+    'dpi':400,
+    'cookie' : [('csrftoken',cookies['csrftoken']),('sessionid',cookies["sessionid"])]
+}
+    url = "http://localhost:8000/app/game/{}".format(game_id) #+ str(game_id)
 
+    #print(url)
+
+    pdfkit.from_url(url, 'media/test3.pdf', options, verbose=True)
+
+    pathpdf = os.getcwd()
+
+    print(pathpdf)
+
+    webbrowser.open("file://"+ pathpdf +"/media/test3.pdf")
+
+    return HttpResponseRedirect('/app')
 
 # For the popups to work, we need to create classes that extend
 # the original view (BSModelCreate|Update|DeleteView).
