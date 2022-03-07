@@ -12,7 +12,7 @@
       {% for favorite in favorites %}
         {% if favorite.game.deleted == False and favorite.user.username == request.user.username %}
           <div class="grid-item">
-            <a href="/app/game/{{ favorite.game.id }}">
+            <a href="{% url 'saved_game_details_page' favorite.game.id %}">
               <span><div class="game-img"><img src="{{ favorite.game.thumbnail.url }}"></div></span>
               <span><div class="game-title">{{ favorite.game.name }}</div></span>
               <span><div class="game-price">{{ favorite.game.get_price }}</div></span>

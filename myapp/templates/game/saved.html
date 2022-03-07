@@ -8,6 +8,20 @@
     <link rel="stylesheet" href="{% static 'assets/css/game_displayer.css' %}" />
     <link rel="stylesheet" href="{% static 'assets/css/game.css' %}" />
   {% endblock extrastylesheets %}
+
+
+  <style>
+    @media print {
+      .parent {
+        overflow: auto;
+        display: block;
+      } 
+    }
+    img {
+      max-width : 500px;
+      max-height: 500px;
+    }
+  </style>
   
   <div class="grid-container">
     <div class="game-details">
@@ -17,7 +31,7 @@
           <button class="update-game-btn button" type="button" name="button" data-form-url="{% url 'update_game' game.pk %}"><span class="fa fa-pencil"></span></button>
           <a href="{% url 'delete_game' game.pk %}"><span class="fa fa-trash"></span></a>
         {% endif %}
-        <a href="{% url 'print_game' game.id %}" class="button"><span class="fa fa-print"></span></a>
+        <button class="button" onclick="window.print()"> <span class="fa fa-print"> </span> </button>
         {% if game.is_favorite %}
           <div href="#" class="favorite-button marked" title="Unmark from favorite">
             <button class="mark-game-as-favorite-btn inline button" type="button" name="button" data-form-url="{% url 'unmark_game_as_favorite' game_id=game.pk user_id=request.user.pk %}"><span class="fa fa-heart fa-1x"></span></a>
