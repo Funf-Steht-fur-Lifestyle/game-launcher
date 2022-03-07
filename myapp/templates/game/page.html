@@ -9,6 +9,19 @@
     <link rel="stylesheet" href="{% static 'assets/css/game.css' %}" />
   {% endblock extrastylesheets %}
 
+  <style>
+    @media print {
+      .parent {
+        overflow: auto;
+        display: block;
+      } 
+    }
+    img {
+      max-width : 500px;
+      max-height: 500px;
+    }
+  </style>
+
   <div class="grid-container">
     <div class="game-details">
       <div class="game-title">
@@ -17,7 +30,7 @@
           <button class="update-game-btn button" type="button" name="button" data-form-url="{% url 'update_game' game.pk %}"><span class="fa fa-pencil"></span></button>
           <a href="{% url 'delete_game' game.pk %}"><span class="fa fa-trash"></span></a>
         {% endif %}
-        <a href="{% url 'print_game' game.id %}" class="button"><span class="fa fa-print"></span></a>
+        <button class="button" onclick="window.print()"> <span class="fa fa-print"> </span> </button>
       </div>
 
       <div class="game-thumb"><img src="{{ game.thumbnail.url }}" /></div>
