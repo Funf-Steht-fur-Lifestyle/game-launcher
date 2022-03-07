@@ -72,18 +72,11 @@ class Favorite(models.Model):
         return '%s' % (self.game)
 
 class AccessToken(models.Model):
-
     access_token = models.CharField('access_token', max_length=256)
 
-   
-
     def __str__(self):
-
         return '%s' % (self.access_token)
 
-
-
     def get_access_token(self):
-
-        return self.access_token()
+        return self.access_token
         

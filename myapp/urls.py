@@ -38,4 +38,5 @@ urlpatterns = [
     path('register', views.register_page, name='register_page'),
     path('logout', views.logout_user, name='logout'),
     path('api-call', views.api_call, name='api_call'),
+    path('api-call-search-game', views.igdb_api_search_game, name='igdb_api_search_game')
 ]

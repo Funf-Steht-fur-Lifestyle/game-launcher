@@ -5,6 +5,31 @@ function autocomplete(inp, arr) {
     /*execute a function when someone writes in the text field:*/
     inp.addEventListener("input", function(e) {
       var a, b, i, val = this.value;
+      
+      /* ### Nicht umgesetzte Funktion ###
+      ### 403 Forbidden (CSRF token missing. ### 
+
+      var search_game = "default"
+      // search_term = document.getElementById("gameName").firstElementChild.value;
+
+      // window.location.href = "{% url 'igdb_api_search_game_search/' search_term = " + search_term + "  % }"
+
+      var formData = new FormData();
+      formData.append('search_game', search_game)
+      formData.append('csrfmiddlewaretoken', "{{ csrf_token }}")
+
+      $.ajax({
+        url: "api-call-search-game",
+        method: "POST",
+        processData: false,
+        contentType: false,
+        data: formData,
+        mimeType: 'data/text',
+        success: function(data) {
+          window.location.href = "/app"
+        }
+      })/*
+
         /*close any already open lists of autocompleted values*/
         closeAllLists();
         if (!val) { return false;}
@@ -96,7 +121,9 @@ function autocomplete(inp, arr) {
   }
   
   /*An array containing all the country names in the world:*/
-  var gameList = ["Afghanistan","Albania","Algeria","Andorra","Angola","Anguilla","Antigua & Barbuda","Argentina","Armenia","Aruba","Australia","Austria","Azerbaijan","Bahamas","Bahrain","Bangladesh","Barbados","Belarus","Belgium","Belize","Benin","Bermuda","Bhutan","Bolivia","Bosnia & Herzegovina","Botswana","Brazil","British Virgin Islands","Brunei","Bulgaria","Burkina Faso","Burundi","Cambodia","Cameroon","Canada","Cape Verde","Cayman Islands","Central Arfrican Republic","Chad","Chile","China","Colombia","Congo","Cook Islands","Costa Rica","Cote D Ivoire","Croatia","Cuba","Curacao","Cyprus","Czech Republic","Denmark","Djibouti","Dominica","Dominican Republic","Ecuador","Egypt","El Salvador","Equatorial Guinea","Eritrea","Estonia","Ethiopia","Falkland Islands","Faroe Islands","Fiji","Finland","France","French Polynesia","French West Indies","Gabon","Gambia","Georgia","Germany","Ghana","Gibraltar","Greece","Greenland","Grenada","Guam","Guatemala","Guernsey","Guinea","Guinea Bissau","Guyana","Haiti","Honduras","Hong Kong","Hungary","Iceland","India","Indonesia","Iran","Iraq","Ireland","Isle of Man","Israel","Italy","Jamaica","Japan","Jersey","Jordan","Kazakhstan","Kenya","Kiribati","Kosovo","Kuwait","Kyrgyzstan","Laos","Latvia","Lebanon","Lesotho","Liberia","Libya","Liechtenstein","Lithuania","Luxembourg","Macau","Macedonia","Madagascar","Malawi","Malaysia","Maldives","Mali","Malta","Marshall Islands","Mauritania","Mauritius","Mexico","Micronesia","Moldova","Monaco","Mongolia","Montenegro","Montserrat","Morocco","Mozambique","Myanmar","Namibia","Nauro","Nepal","Netherlands","Netherlands Antilles","New Caledonia","New Zealand","Nicaragua","Niger","Nigeria","North Korea","Norway","Oman","Pakistan","Palau","Palestine","Panama","Papua New Guinea","Paraguay","Peru","Philippines","Poland","Portugal","Puerto Rico","Qatar","Reunion","Romania","Russia","Rwanda","Saint Pierre & Miquelon","Samoa","San Marino","Sao Tome and Principe","Saudi Arabia","Senegal","Serbia","Seychelles","Sierra Leone","Singapore","Slovakia","Slovenia","Solomon Islands","Somalia","South Africa","South Korea","South Sudan","Spain","Sri Lanka","St Kitts & Nevis","St Lucia","St Vincent","Sudan","Suriname","Swaziland","Sweden","Switzerland","Syria","Taiwan","Tajikistan","Tanzania","Thailand","Timor L'Este","Togo","Tonga","Trinidad & Tobago","Tunisia","Turkey","Turkmenistan","Turks & Caicos","Tuvalu","Uganda","Ukraine","United Arab Emirates","United Kingdom","United States of America","Uruguay","Uzbekistan","Vanuatu","Vatican City","Venezuela","Vietnam","Virgin Islands (US)","Yemen","Zambia","Zimbabwe"];
+  var gameList = ["Minecraft","Grand Theft Auto V","Tetris (EA-Version)","Wii Sports","PUBG: Battlegrounds","Mario Kart 8 (Deluxe)","Overwatch","Tetris (Nintendo-Version)","Red Dead Redemption 2","Super Mario Bros.","Counter-Strike: Global Offensive","Animal Crossing: New Horizons","Mario Kart Wii","Terraria","Wii Sports Resort","Pokémon Rote und Blaue Edition","New Super Mario Bros.","New Super Mario Bros. Wii","The Elder Scrolls V: Skyrim","Grand Theft Auto: San Andreas","The Witcher 3: Wild Hunt","Diablo III","Call of Duty: Modern Warfare","Human: Fall Flat","Duck Hunt","Wii Play","Super Smash Bros. Ultimate","Call of Duty: Modern Warfare 3","Call of Duty: Black Ops","Borderlands 2","The Legend of Zelda: Breath of the Wild","Grand Theft Auto IV","Grand Theft Auto: Vice City","Grand Theft Auto III","Call of Duty: Black Ops II","FIFA 18","Kinect Adventures!","Nintendogs","Pokémon Schwert und Schild","Mario Kart DS","Pokémon Goldene und Silberne Edition","Super Mario Odyssey","Call of Duty: Modern Warfare 2","Wii Fit","Wii Fit Plus","Super Mario World","Frogger","Lemmings","Marvel’s Spider-Man","The Last of Us","FIFA 19","Garry’s Mod","Dr. Kawashimas Gehirn-Jogging","Call of Duty: Ghosts","Mario Kart 7","Super Mario Land","Monster Hunter: World","Pokémon Diamant- und Perl-Edition","Super Mario Party","Super Mario Bros. 3","Sonic & Sega All-Stars Racing","Pokémon X und Y","Pokémon Sonne und Mond","Pokémon Rubin- und Saphir-Edition","Die Sims","Need for Speed: Most Wanted","Uncharted 4: A Thief’s End","FIFA 11","FIFA 16","Call of Duty 4: Modern Warfare","Call of Duty: World at War","Pokémon Schwarze und Weiße Edition","Red Dead Redemption","Battlefield 3","Need for Speed: Underground","Sonic the Hedgehog","Stardew Valley","Borderlands 3"];
   
   /*initiate the autocomplete function on the "form.name" element, and pass along all games as an array as possible autocomplete values:*/
   autocomplete(document.getElementById("gameName").firstElementChild, gameList);
+
+ 

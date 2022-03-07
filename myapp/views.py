@@ -19,7 +19,7 @@ from bootstrap_modal_forms.generic import BSModalCreateView, BSModalUpdateView, 
 
 from tablib import Dataset
 
-from .models import User, Game, Category, Favorite, SavedGame
+from .models import AccessToken, User, Game, Category, Favorite, SavedGame
 from .resources import UserResource, GameResource, CategoryResource, FavoriteResource, SavedGameResource
 from .forms import GameForm, CategoryForm, CreateUserForm
 from .exporter import Exporter
@@ -64,7 +64,6 @@ def game_by_id(request, game_id):
 
     return render(request, 'game/page.html', args)
 
-
 @login_required(login_url='/app/login')
 def game_delete(request, game_id):
     game = Game.objects.get(pk=game_id)
@@ -90,13 +89,15 @@ def igdb_api_authentication(request):
 
 # Für das Suchfeld
 @login_required(login_url='app/login')
-def igdb__api_search_game(request, searchTerm):
+def igdb_api_search_game(request):
  
+    print("search Term: " + request.POST["search_game"])
+
     url = "https://api.igdb.com/v4/games"
 
     at = AccessToken.objects.get(pk=1).get_access_token()
     
-    payload = "search \""+ searchTerm + " \";\r\nfields name;\r\n"
+    payload = "search \""+ request.POST["search_game"] + " \";\r\nfields name;\r\n"
     headers = {
         'Authorization': 'Bearer ' + at,
         'Client-ID': 'phutxcabah8hduf96zsx7j62s7wkwn',
@@ -110,10 +111,16 @@ def igdb__api_search_game(request, searchTerm):
     print(response.json())
 
     if response.status_code == 200:
-        return response.json() # returns a dict with fields "id", "name"
+        games = []
+        for x in response.json():
+            games.append(x["name"])
+
+        args = {}
+        args["games"] = games
+        return render("game/add.html", args)
     
-    print("API Call >search_game< failed for some reason")
-    return 1
+    #print("API Call >search_game< failed for some reason")
+    #return 1
 
 @login_required(login_url='app/login')
 def igdb_api_get_game_data(request, gameId):
@@ -360,6 +367,11 @@ def login_page(request):
 
             if user is not None:
                 login(request, user)
+
+                access_token = igdb_api_authentication(request)
+                acto = AccessToken(access_token = access_token)
+                acto.save()
+
                 return HttpResponseRedirect('/app')
             else:
                 messages.info(request, 'username or password is incorrect')
