@@ -73,6 +73,100 @@ def game_delete(request, game_id):
 
     return HttpResponseRedirect('/app/')
 
+@login_required(login_url='app/login')
+def igdb_api_authentication(request):
+
+    r = requests.post('https://id.twitch.tv/oauth2/token?client_id=phutxcabah8hduf96zsx7j62s7wkwn&client_secret=jlth8qse7y6ndfgiwnzkyeuogwsxx7&grant_type=client_credentials')
+
+    print(r)
+    print("HTTP Status Code: ", r.status_code)
+    print(r.json())
+
+    if r.status_code == 200:
+        return r.json()["access_token"]
+    
+    print("Could not authenticate at twitch.tv")
+    return 1
+
+# Für das Suchfeld
+@login_required(login_url='app/login')
+def igdb__api_search_game(request, searchTerm):
+ 
+    url = "https://api.igdb.com/v4/games"
+
+    at = AccessToken.objects.get(pk=1).get_access_token()
+    
+    payload = "search \""+ searchTerm + " \";\r\nfields name;\r\n"
+    headers = {
+        'Authorization': 'Bearer ' + at,
+        'Client-ID': 'phutxcabah8hduf96zsx7j62s7wkwn',
+        'Content-Type': 'text/plain'
+    }
+
+    response = requests.request("POST", url, headers=headers, data=payload)
+
+    print(response)
+    print("HTTP Status Code: ", response.status_code)
+    print(response.json())
+
+    if response.status_code == 200:
+        return response.json() # returns a dict with fields "id", "name"
+    
+    print("API Call >search_game< failed for some reason")
+    return 1
+
+@login_required(login_url='app/login')
+def igdb_api_get_game_data(request, gameId):
+ 
+    url = "https://api.igdb.com/v4/games"
+
+    payload = "where id = " + gameId + ";\r\nfields id, name,genres.name, cover.*,rating, slug, summary;"
+    
+    headers = {
+        'Authorization': 'Bearer ' + AccessToken.objects.get(pk=1).get_access_token(),
+        'Client-ID': 'phutxcabah8hduf96zsx7j62s7wkwn',
+        'Content-Type': 'text/plain'
+    }
+
+    response = requests.request("POST", url, headers=headers, data=payload)
+
+    print(response)
+    print("HTTP Status Code: ", response.status_code)
+    print(response.json())
+
+    if response.status_code == 200:
+        return response.json()[0] # returns a dict object with a lot of fields
+    
+    print("API Call >get_game_data< failed for some reason")
+    return 1
+
+@login_required(login_url='app/login')
+
+def igdb_api_get_cover_art(request, gameId = "1942", size = "720p"):
+    
+    # Vorhandene Größen: cover_small 	90 x 128 	Fit
+    # screenshot_med 	                569 x 320 	Lfill, Center gravity
+    # cover_big 	                    264 x 374 	Fit
+    # logo_med 	                        284 x 160 	Fit
+    # screenshot_big 	                889 x 500 	Lfill, Center gravity
+    # screenshot_huge               	1280 x 720 	Lfill, Center gravity
+    # thumb 	                        90 x 90 	Thumb, Center gravity
+    # micro 	                        35 x 35 	Thumb, Center gravity
+    # 720p                          	1280 x 720 	Fit, Center gravity
+    # 1080p 	                        1920 x 1080 Fit, Center gravity
+
+    url = "https://images.igdb.com/igdb/image/upload/t_" + size 
+
+    gameData = igdb_api_get_game_data(request, gameId)
+    
+    #print("DEBUG: " + gameData)
+
+    url = url+"/" + gameData["cover"]["image_id"] + ".jpg"
+
+    print("DEBUG: " + url)
+
+    return HttpResponse(url) # What Response here?
+
 
 
 @login_required(login_url='/app/login')
