@@ -13,26 +13,12 @@
   {% block extrastylesheets %}
     <link rel="stylesheet" href="{% static 'assets/css/game_displayer.css' %}" />
     <link rel="stylesheet" href="{% static 'assets/css/selection_menu.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/selection_import_bar.css' %}" />
   {% endblock extrastylesheets %}
   
   <div class="content">
     <div class="sorting">
-      <div class="s">
-        <span><p>Sortiere nach: </p></span>
-        <div class="select">
-          <select id="standard-select">
-            <option id="name" value="1">Alphabetisch</option>
-            <option id="price" value="2">Pries: Aufsteigend</option>
-            <option id="-price" value="3">Pries: Absteigend</option>
-            <option id="" value="4">Bewertung: Aufsteigend</option>
-            <option id="" value="5">Bewertung: Absteigend</option>
-          </select>
-        </div>
-      </div>
-      <div class="import-export">
-        <span><a href="{% url 'import_csv' %}">Import</a></span>
-        <span><a href="{% url 'export_csv' %}">Export</a></span>
-      </div>
+      {% include 'core/selection_import_header.html' %}
     </div>
     <div class="grid">
       {% for saved_game in saved_games %}

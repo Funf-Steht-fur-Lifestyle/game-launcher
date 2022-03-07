@@ -3,9 +3,10 @@
 {% load static %}
 
 {% block content %}
+
   {% block extrastylesheets %}
-    <link rel="stylesheet" href="{% static 'assets/css/game.css' %}" />
     <link rel="stylesheet" href="{% static 'assets/css/game_displayer.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/game.css' %}" />
   {% endblock extrastylesheets %}
   
   <div class="grid-container">
@@ -74,4 +75,5 @@
       });
     </script>
   {% endblock extrascripts %}
+
 {% endblock content %}

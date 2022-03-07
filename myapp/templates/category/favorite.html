@@ -12,10 +12,10 @@
       {% for favorite in favorites %}
         {% if favorite.game.deleted == False and favorite.user.username == request.user.username %}
           <div class="grid-item">
-            <a href="game/{{ game.id }}">
+            <a href="/app/game/{{ favorite.game.id }}">
               <span><div class="game-img"><img src="{{ favorite.game.thumbnail.url }}"></div></span>
               <span><div class="game-title">{{ favorite.game.name }}</div></span>
-              <span><div class="game-price">33,45 €</div></span>
+              <span><div class="game-price">{{ favorite.game.get_price }}</div></span>
             </a>
             <div href="#" class="favorite-button marked" title="Unmark from favorite">
                <button class="mark-game-as-favorite-btn inline button" type="button" name="button" data-form-url="{% url 'unmark_game_as_favorite' game_id=favorite.game.pk user_id=request.user.pk %}"><span class="fa fa-heart fa-1x"></span></a>

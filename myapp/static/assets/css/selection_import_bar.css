@@ -1,0 +1,34 @@
+#import-form {
+  display: inline-block;
+}
+
+.sorting {
+  display: flex;
+  justify-content: space-between;
+}
+
+.s {
+  display: flex;
+  justify-content: space-between;
+}
+
+#standard-select {
+  margin-left: 10px;
+}
+
+.import-export {
+  float: right;
+}
+
+.import-export a {
+  color: #F1F1F1;
+}
+
+#export-csv-btn,
+#import-csv-btn,
+#save-game-btn {
+  background-color: #0074E4;
+  border-color: transparent;
+  color: #F1F1F1;
+  margin-right: 10px;
+}
